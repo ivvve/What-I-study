@@ -1,4 +1,4 @@
-# Introduction
+## 소개 
 
 Nest는 효율적이고 확장성있는 Node.js 서버 사이드 애플리케이션을 구축하기 위한 프레임워크입니다.
 Nest는 진보적인 JavaScript를 사용하며 Typescript(순수 Javascript와 호환성을 지킵니다) 로 구축되고
@@ -7,7 +7,7 @@ Object Oriented Programming, Functional Programming, Functional Rective Programm
 내부적으로, Nest는 Express를 사용합니다. 하지만 또한 다른 여러 라이브러리들(e.g. Fastify)과 호환성을 제공합니다.
 이는 무수히 많은 사용가능한 third-party 플러그인들을 쉽게 사용하도록합니다.
 
-## Philoshophy
+## 철학
 
 최근 몇 년 동안 Node.js 덕분에, JavaScript는 웹 프론트와 백엔드 애플리케이션의 공용 언어(lingua franca)가 되었습니다.
 이는 Angular, React, Vue와 같은 개발자들의 생산성을 증가시키고 빠르고, 태스트 가능하며 확장성 있는 애플리케이션을 만들수 있도록 해주는 죽이는 프로젝트들이 생겨나게 했습니다.
@@ -15,7 +15,7 @@ Object Oriented Programming, Functional Programming, Functional Rective Programm
 
 Nest는 노력없이 매우 테스트 가능하고, 확장 가능하며, 커플링이 적고 쉽게 유지 가능한 애플리케이션을 생성할 수 있게 해주는 즉시 사용 가능한(out-of-the-box) 애플리케이션 구조를 제공합니다.
 
-## Installation
+## 설치 
 
 시작하기 위해서, Nest CLI를 사용하여 기본 프로젝트를 만듭니다.
 
