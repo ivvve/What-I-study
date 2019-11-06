@@ -2,100 +2,20 @@
 
 ---
 
-[이것이 레디스다](http://www.yes24.com/Product/Goods/16512938)의 7장 레디스 활용 사례를 참고하여 정리하였음
+[이것이 레디스다](http://www.yes24.com/Product/Goods/16512938)의 **7장 레디스 활용 사례**를 참고하여 정리하였음
 
 ---
 
 ## Data structure of Redis
 
-Redis는 in-memory Key-Value(Map 구조) 저장소이다.
+Redis는 **in-memory Key-Value(Map 구조) 저장소**이다.
 
-![](2019-11-03-14-12-33.png)
+![](./images/redis-usage-by-example-01.png)
 
 이 Value의 자료구조로는 **string**, **list**, **set**, **hash** 등이 있다.
 
 ## Examples
 
-### 사용자 방문 확인 기능
-
-- `GETBIT`, `SETBIT`: 입력된 offset 위치에 저장된 bit값을 변경하거나 가져온다.
-- `BITCOUNT`: 값이 1인 bit의 갯수를 조회한다.
-
-```bash
-redis:6379> SETBIT bit 0 1
-(integer) 0 # 이전 값
-
-redis:6379> GETBIT bit 0
-(integer) 1
-redis:6379> GETBIT bit 2
-(integer) 0
-
-redis:6379> SETBIT bit 10 1
-(integer) 0
-redis:6379> BITCOUNT bit
-(integer) 2
-```
-
-- 사용자 ID에 해당하는 offset의 bit 값을 변경하여 기능을 구현한다
-  - key: `login:${date}`
-
-```bash
-# User ID가 '10'인 사용자의 2019.11.03 로그인 이력 저장
-redis:6379> SETBIT login:20191103 10 1
-(integer) 0
-# User ID가 '13'인 사용자의 2019.11.03 로그인 이력 저장
-redis:6379> SETBIT login:20191103 13 1
-(integer) 0
-# User ID가 '40'인 사용자의 2019.11.03 로그인 이력 저장
-redis:6379> SETBIT login:20191103 40 1
-(integer) 0
-
-# 2019.11.03 로그인한 회원 수 조회
-redis:6379> BITCOUNT login:20191103
-(integer) 3
-
-# User ID가 '10'인 사용자의 2019.11.03 로그인 이력 조회
-redis:6379> GETBIT login:20191103 10
-(integer) 1
-```
-
-### 웹 서버 로그 통합
-
-Redis의 **List**를 사용하여 여러 웹 서버의 로그를 하나의 파일에 통합하여 저장하는 기능 구현
-
-![](2019-11-03-19-33-15.png)
-
-```ts
-// Web Server에서 log를 쓰는 function
-function writeLog(redisClient: RedisClient, log: string): void {
-  const timestamp = moment().format('yyyyMMdd HH:mm:ss SSS');
-  redisClient.lpush('server:log', `${timestamp} ${log}`);
-}
-```
-
-```ts
-// 로그를 통합하여 저장하는 Application의
-// 통합 로그 생성 function
-async function run(redisClient: RedisClient) {
-  const timestamp = moment().format('yyyyMMdd_HH');
-  
-  while (true) {
-    const log = await redisClient.rpop('server:log');
-
-    if (!log) {
-      break;
-    }
-
-    try {
-      fs.appendFileSync(`server_log_${timestamp}.log`, log);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  console.log('done!');
-}
-```
 
 ### 파일 다운로드 횟수 카운트 기능
 
@@ -242,74 +162,149 @@ export class FileDownloadByDateCounter {
 }
 ```
 
-### 장바구니 기능 정보
+### 사용자 방문 확인 기능
 
-- 기능
-    - 장바구니 상품 등록
-    - 장바구니 상품 삭제
-    - 장바구니 비구기
-    - 장바구니 상품 목록 조회
-    - 오래된 장바구니 상품 삭제
+- `GETBIT`, `SETBIT`: 입력된 offset 위치에 저장된 bit값을 변경하거나 가져온다.
+- `BITCOUNT`: 값이 1인 bit의 갯수를 조회한다.
 
 ```bash
-redis:6379> SET key 1
-OK
+redis:6379> SETBIT bit 0 1
+(integer) 0 # 이전 값
 
-redis:6379> EXPIRE key 10
+redis:6379> GETBIT bit 0
 (integer) 1
+redis:6379> GETBIT bit 2
+(integer) 0
 
-redis:6379> TTL key
-(integer) 5
-
-redis:6379> get key
-"1"
-
-redis:6379> GET key
-(nil)
+redis:6379> SETBIT bit 10 1
+(integer) 0
+redis:6379> BITCOUNT bit
+(integer) 2
 ```
 
+- 사용자 ID에 해당하는 offset의 bit 값을 변경하여 기능을 구현한다
+  - key: `login:${date}`
+
+```bash
+# User ID가 '10'인 사용자의 2019.11.03 로그인 이력 저장
+redis:6379> SETBIT login:20191103 10 1
+(integer) 0
+# User ID가 '13'인 사용자의 2019.11.03 로그인 이력 저장
+redis:6379> SETBIT login:20191103 13 1
+(integer) 0
+# User ID가 '40'인 사용자의 2019.11.03 로그인 이력 저장
+redis:6379> SETBIT login:20191103 40 1
+(integer) 0
+
+# 2019.11.03 로그인한 회원 수 조회
+redis:6379> BITCOUNT login:20191103
+(integer) 3
+
+# User ID가 '10'인 사용자의 2019.11.03 로그인 이력 조회
+redis:6379> GETBIT login:20191103 10
+(integer) 1
 ```
-// client의 장바구니 안에 있는 상품 목록
-cart:${client_id}:products
-// client의 장바구니 안에 있는 상품의 특정 정보 (상품명, 수량 등...)
-cart:${client_id}:products:${product_id}
+
+### 일주일 단위의 순 방문 횟수 조회 기능
+: 일주일 동안 한 번도 빠지지 않고 로그인한 사용자
+
+![](./images/redis-usage-by-example-02.png)
+
+![](./images/redis-usage-by-example-03.png)
+
+![](./images/redis-usage-by-example-04.png)
+
+각 오프셋값을 대상으로 `AND` 비트연산을 수행하면 순 방문자를 구할 수 있다.
+
+Redis의 `BITOP`을 사용하여 비트 연산을 수행, 날짜별 순 방문 횟수 조회기능을 구현
+
+```
+The BITOP command supports four bitwise operations: AND, OR, XOR and NOT, 
+thus the valid forms to call the command are:
+
+- BITOP AND destkey srckey1 srckey2 srckey3 ... srckeyN
+- BITOP OR destkey srckey1 srckey2 srckey3 ... srckeyN
+- BITOP XOR destkey srckey1 srckey2 srckey3 ... srckeyN
+- BITOP NOT destkey srckey
 ```
 
 ```ts
-export class Cart {
-  private static CART = 'cart';
-  private static PRODUCTS = 'products';
-  private static EXPIRE_SECS = 60 * 60 * 24 * 3;
+export class VisitCounter {
+  // 로그인 누적 카운트
+  private static TOTAL = 'login:count:total';
+  // 최초 로그인만 카운트
+  private static UNIQUE = 'login:count';
 
-  private redisClient: RedisClient;
-  private clientId: string;
-
-  constructor(redisClient: RedisClient, clientId: string) {
+  constructor(redisClient: RedisClient) {
     this.redisClient = redisClient;
-    this.clientId = clientId;
+  }
+  
+  visit(userId: string) {
+    const today = moment().format('yyyyMMdd');
+    this.redisClient.incr(`${VisitCounter.TOTAL}:${today}`);
+    this.redisClient.setbit(`${VisitCounter.UNIQUE}:${today}`, userId, 1);
   }
 
-  getCartInfo() {
-    this.redisClient.get(`${Cart.CART}`)
+  // 특정 날짜의 로그인 수 확인
+  getVisitors(dates: string[]): Promise<number[]> {
+    const bitcountPromises = [];
+
+    dates.forEach(date => {
+      const bitcountPromise = this.redisClient.bitcount(`${VisitCounter.UNIQUE}:${date}`);
+      bitcountPromises.push(bitcountPromise);
+    });
+
+    return Promise.all(bitcountPromises);
+  }
+
+  // 순 접속자 수 확인
+  getUniqueVisitors(dates: string[]): Promise<number> {
+    const dateKeys = dates.map(date => {
+      return `${VisitCounter.UNIQUE}:${date}`;
+    });
+    await this.redisClient.bitop('AND', VisitCounter.UNIQUE, dateKeys);
+    return this.redisClient.bitcount(VisitCounter.UNIQUE);
   }
 }
 ```
 
+### 웹 서버 로그 통합
 
+Redis의 **List**를 사용하여 여러 웹 서버의 로그를 하나의 파일에 통합하여 저장하는 기능 구현
 
+![](./images/redis-usage-by-example-05.png)
 
+```ts
+// Web Server에서 log를 쓰는 function
+function writeLog(redisClient: RedisClient, log: string): void {
+  const timestamp = moment().format('yyyyMMdd HH:mm:ss SSS');
+  redisClient.lpush('server:log', `${timestamp} ${log}`);
+}
+```
 
+```ts
+// 로그를 통합하여 저장하는 Application의
+// 통합 로그 생성 function
+async function run(redisClient: RedisClient) {
+  const timestamp = moment().format('yyyyMMdd_HH');
+  
+  while (true) {
+    const log = await redisClient.rpop('server:log');
 
+    if (!log) {
+      break;
+    }
 
+    try {
+      fs.appendFileSync(`server_log_${timestamp}.log`, log);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-
-
-
-
-
-
-
----
+  console.log('done!');
+}
+```
 
 ### 좋아요 기능
 
@@ -345,7 +340,7 @@ redis:6379> SCARD set
 ```
 
 - Redis의 SET 자료구조를 사용하여 좋아요 기능을 구현한다.
-  - key: drawing_quiz:like:${drawing_id}
+  - key: `drawing_quiz:like:${drawing_id}`
 
 ```ts
 export class DrawingQuizLikeManager {
@@ -373,19 +368,6 @@ export class DrawingQuizLikeManager {
   }
 }
 ```
-
-### 순 방문자 집계 기능
-
-
-
-
-
-
-
-
-
-
----
 
 ### 최근 조회 상품 목록 기능
 
