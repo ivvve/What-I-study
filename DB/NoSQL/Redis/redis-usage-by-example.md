@@ -371,9 +371,6 @@ export class DrawingQuizLikeManager {
 
 ### 최근 조회 상품 목록 기능
 
-- 파일 ID에 해당하는 key 값을 증가시켜 다운로드 횟수 기능을 구현한다
-  - key: `download:${file_id}`
-
 List를 사용하여 최근 조회 상품을 관리할 수 있다.
 하지만 최근 조회 목록에 있는 상품을 다시 조회할 경우
 1. 최근 조회 상품 중복 확인
