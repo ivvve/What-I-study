@@ -1,0 +1,8 @@
+# IDE meta files
+.idea
+
+# node.js dependencies
+node_modules
+
+# Next
+.next
