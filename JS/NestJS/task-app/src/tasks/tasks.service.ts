@@ -1,10 +1,10 @@
 import {Injectable} from "@nestjs/common";
-import {TasksModel, TaskStatus} from "./tasks.model";
+import {Task, TaskStatus} from "./task.model";
 import * as uuid from 'uuid/v4';
 
 @Injectable()
 export class TasksService {
-  private readonly tasks: TasksModel[] = [];
+  private readonly tasks: Task[] = [];
 
   constructor() {
     for (let i = 1; i <= 10; i++) {
@@ -12,15 +12,56 @@ export class TasksService {
     }
   }
 
-  getAllTasks(): TasksModel[] {
+  getAllTasks(): Task[] {
     return this.tasks;
   }
 
-  createTask(title: string, description: string): TasksModel {
+  getFilteredTasks(status: TaskStatus, search: string): Task[] {
+    let results = this.tasks;
+
+    if (status) {
+      results = results.filter(task => (task.status === status));
+    }
+
+    if (search) {
+      results = results.filter(task => (task.description.includes(search)));
+    }
+
+    return results;
+  }
+
+  getTaskById(id: string): Task {
+    return this.tasks.find(task => (task.id === id));
+  }
+
+  createTask(title: string, description: string): Task {
     const id = uuid();
     const task = {id: id, title: title, description: description, status: TaskStatus.OPEN};
     this.tasks.push(task);
 
     return task;
+  }
+
+  deleteTask(id: string): boolean {
+    const task = this.getTaskById(id);
+
+    if (!task) {
+      return false;
+    }
+
+    const indexOfTask = this.tasks.indexOf(task);
+    this.tasks.splice(indexOfTask, 1);
+    return true;
+  }
+
+  updateTask(id: string, status: TaskStatus): boolean {
+    const task = this.getTaskById(id);
+
+    if (!task) {
+      return false;
+    }
+
+    task.status = status;
+    return true;
   }
 }
