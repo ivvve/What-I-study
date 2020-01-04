@@ -1,4 +1,4 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable, NotFoundException} from "@nestjs/common";
 import {Task, TaskStatus} from "./task.model";
 import * as uuid from 'uuid/v4';
 
@@ -46,7 +46,7 @@ export class TasksService {
     const task = this.getTaskById(id);
 
     if (!task) {
-      return false;
+      throw new NotFoundException();
     }
 
     const indexOfTask = this.tasks.indexOf(task);
@@ -58,7 +58,7 @@ export class TasksService {
     const task = this.getTaskById(id);
 
     if (!task) {
-      return false;
+      throw new NotFoundException();
     }
 
     task.status = status;
