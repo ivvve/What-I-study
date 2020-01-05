@@ -1,5 +1,5 @@
 import {ArgumentMetadata, BadRequestException, PipeTransform} from "@nestjs/common";
-import {TaskStatus} from "../task.model";
+import {TaskStatus} from "../task-status.enum";
 
 export class TaskStatusValidationPipe implements PipeTransform {
   private readonly statuses = [
@@ -9,7 +9,7 @@ export class TaskStatusValidationPipe implements PipeTransform {
   ];
 
   transform(value: any, metadata: ArgumentMetadata): any {
-    value = value.toUpperCase();
+    const status = value.status.toUpperCase();
 
     console.log('----------------');
     console.log('value');

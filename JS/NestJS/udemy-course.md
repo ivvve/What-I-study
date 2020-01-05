@@ -55,3 +55,110 @@ npm run start:dev
       ```
 
 ![](./images/pipes-01.png)
+
+
+---
+
+## ORM using Typeorm
+
+- entity
+
+```ts
+@Entity()
+export class Task extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  title: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  status: TaskStatus;
+
+  constructor(title: string, description: string) {
+    super();
+    this.title = title;
+    this.description = description;
+    this.status = TaskStatus.OPEN;
+  }
+
+  changeStatus(status: TaskStatus) {
+    this.status = status;
+  }
+}
+```
+
+- entity 등록
+```ts
+export const typeOrmConfig: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: '127.0.0.1',
+  port: '8300',
+  username: 'wave',
+  password: 'wave1234',
+  database: 'taskmanagement',
+  entities: [Task],
+  synchronize: true,
+  logging: 'all'
+};
+```
+
+```ts
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot(typeOrmConfig), // config
+    TypeOrmModule.forFeature([TaskRepository]) // repository
+  ],
+  controllers: [TasksController],
+  providers: [TasksService]
+})
+export class TasksModule {}
+```
+
+- repository
+
+```ts
+import {EntityRepository, Repository} from "typeorm";
+import {Task} from "./task.entity";
+
+@EntityRepository(Task)
+export class TaskRepository extends Repository<Task> {
+}
+```
+
+가져다 쓸 때는 
+```ts
+@Injectable()
+export class TasksService {
+  constructor(
+    @InjectRepository(TaskRepository)
+    private readonly taskRepository: TaskRepository
+  ) {}
+}
+```
+
+- query builder
+
+```ts
+// parameter는 alias로 아래 query에서 사용된다
+const query = this.taskRepository.createQueryBuilder('task');
+
+if (status) {
+  query.andWhere('task.status = :status', { status });
+}
+
+if (search) {
+  // ()로 묶어주지 않으면 위 query에 같이 묶여져서
+  // WHERE status AND description OR title
+  // 이렇게 query가 생성된다
+  query.andWhere(
+    '(task.description LIKE :search OR task.title LIKE :search)',
+    { search: `%${search}%` });
+}
+
+return query.getMany();
+```
