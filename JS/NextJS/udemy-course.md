@@ -205,3 +205,7 @@ const SideMenu = (prop: Readonly<{ count: number, shopName: string, func: Functi
   )
 };
 ```
+
+---
+
+- How web app works?

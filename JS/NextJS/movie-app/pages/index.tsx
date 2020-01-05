@@ -5,20 +5,9 @@ import SideMenu from "../components/side-menu";
 import Carousel from "../components/carousel";
 import MovieList from "../components/movie-list";
 import Footer from "../components/footer";
+import {MOVIE_DATA} from "../resources/movie-data";
 
 const Home = () => {
-  const [ count, setCount ] = useState(0);
-
-  const increment = () => {
-    const newCount = count + 1;
-    setCount(newCount);
-  };
-
-  const decrement = () => {
-    const newCount = count - 1;
-    setCount(newCount);
-  };
-
   return (
     <div>
       <Head>
@@ -41,18 +30,15 @@ const Home = () => {
 
       <div className="home-page">
         <div className="container">
-          <button onClick={() => increment()} className="btn btn-primary">Increment</button>
-          <button onClick={() => decrement()} className="btn btn-primary">Increment</button>
-
           <div className="row">
             <div className="col-lg-3">
-              <SideMenu count={count} shopName={'Chris'} func={() => console.log('Hello Func!')}/>
+              <SideMenu/>
             </div>
 
             <div className="col-lg-9">
               <Carousel/>
               <div className="row">
-                <MovieList/>
+                <MovieList movies={MOVIE_DATA}/>
               </div>
             </div>
 
