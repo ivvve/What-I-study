@@ -1,14 +1,17 @@
+# Udemy Next.js course
+
+## Next.js start
 - init project
 
 ```bash
+# npx로 기본 프로젝트 생성하기
 npx create-next-app
 
-# or
-
-npm install --save react react-dom next
+# 혹은 수동으로 npm package 다운받기
+npm i react react-dom next
 ```
 
-- start app
+- start app as dev
 
 ```bash
 npm run dev
@@ -21,17 +24,20 @@ http://localhost:3000/
 index.js의 Nav는 components의 nav.js이다.
 이를 주석처리하면 index 페이지 상단에 Nav bar가 없어지는 걸 확인할 수 있다.
 
----
+## Functional Components
 
-- Functional Components
+- Next.js Route 기능
 
-![](2020-01-03-07-31-05.png)
+![](./images/nextjs-route-01.png)
 
 pages에 추가하면 해당 파일명으로 path가 생성된다.
 
+- Functional Components
+
+함수로만 Component를 생성한다
+
 ```tsx
 // about.tsx
-// functional component
 const About = () => {
   const message = 'Hello World';
   return (
@@ -46,11 +52,14 @@ export default About;
 
 http://localhost:3000/about
 
-![](2020-01-03-07-33-50.png)
+![](./images/functional-components-01.png)
 
-- Class Components
+## Class Components
+
+React.Component를 상속받은 class로 Component를 생성한다.
 
 ```tsx
+// about.tsx
 import React from "react";
 
 class About extends React.Component<any, any> {
@@ -65,7 +74,7 @@ class About extends React.Component<any, any> {
 export default About;
 ```
 
-- basic styles
+## Basic Styles
 ```tsx
 <div className="home-page"> {/* home-page */}
   <div className="container">
@@ -86,7 +95,7 @@ export default About;
 </div>
 <Footer/>
 
-{/* home-page class에 css 설정 */}
+{/* .home-page에 css를 설정 */}
 <style jsx>{`
   .home-page {
     padding-top: 80px;
@@ -94,26 +103,29 @@ export default About;
 `}</style>
 ```
 
-![](2020-01-04-19-36-10.png)
+`<style jsx></style>`을 통해 css를 설정하면 아래와 같이 jsx 클래스도 추가된다.
 
-하면 위와 같이 class에 jsx가 추가된다.
+![](./images/basic-styles-01.png)
 
-- state
+## state
 
-## Class Components
+### Class Components에서 state 관리
 
 ```tsx
 class Count extends React.Component<any, any> {
   constructor(props: any, context: any) {
     super(props, context);
 
+    // state 초기화
     this.state = {
       count: 0
+    }
   }
   
   increment() {
     const count = this.state.count;
-    this.setState({ count: count + 1 }); // state 바꿀 때는 직접 바꾸지 않는다
+    this.setState({ count: count + 1 });
+    // state 바꿀 때는 직접 바꾸지 않는다
   };
 
   decrement() {
@@ -125,24 +137,27 @@ class Count extends React.Component<any, any> {
     return (
       <>
         <div>
+          {/* onClick event handler */}
           <button onClick={() => this.increment()} className="btn btn-primary">Increment Number</button>
           <button onClick={() => this.decrement()} className="btn btn-primary">Decrement Number</button>
 
-          <span>{this.state.count}</span> {/* state 값 가져오기 */}
+          {/* state 값 가져오기 */}
+          <span>{this.state.count}</span>
         </div>
     )
   }
 }
 ```
 
-## Functional Components
+### Functional Components에서 state 관리
 
 ```tsx
 import React, {useState} from 'react';
 
 const SideMenu = () => {
-  const [ count, setCount ] = useState(0); // 새로운 state를 생성해준다
-  // setCount는 꼭 setter 형식이 아니어도 된다
+  // useState(초기값): 지정한 초기값을 가진 새로운 state와 setState 함수를 생성한다
+  const [ count, setCount ] = useState(0); 
+  // setState 함수는 해당 state의 값만을 관리하며, 함수명은 자유롭게 지정할 수 있다.
 
   const increment = () => {
     const newCount = count + 1;
@@ -166,4 +181,26 @@ const SideMenu = () => {
 };
 ```
 
-# prop 부터
+## prop
+
+Parent component가 Children components로 props를 통해 값을 전달할 수 있다.
+
+```tsx
+// index.tsx
+// props는 함수도 전달할 수 있다.
+<div className="col-lg-3">
+  <SideMenu 
+    count={count} 
+    shopName={'Chris'} 
+    func={() => console.log('Hello Func!')}
+    />
+</div>
+```
+
+```tsx
+const SideMenu = (prop: Readonly<{ count: number, shopName: string, func: Function }>) => {
+  return (
+    <h1 onClick={() => prop.func()} className="my-4">{prop.shopName}</h1>
+  )
+};
+```

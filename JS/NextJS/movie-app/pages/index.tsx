@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Head from 'next/head'
 import Navbar from "../components/navbar";
 import SideMenu from "../components/side-menu";
@@ -6,7 +6,20 @@ import Carousel from "../components/carousel";
 import MovieList from "../components/movie-list";
 import Footer from "../components/footer";
 
-const Home = () => (
+const Home = () => {
+  const [ count, setCount ] = useState(0);
+
+  const increment = () => {
+    const newCount = count + 1;
+    setCount(newCount);
+  };
+
+  const decrement = () => {
+    const newCount = count - 1;
+    setCount(newCount);
+  };
+
+  return (
     <div>
       <Head>
         <title>Home</title>
@@ -28,9 +41,12 @@ const Home = () => (
 
       <div className="home-page">
         <div className="container">
+          <button onClick={() => increment()} className="btn btn-primary">Increment</button>
+          <button onClick={() => decrement()} className="btn btn-primary">Increment</button>
+
           <div className="row">
             <div className="col-lg-3">
-              <SideMenu/>
+              <SideMenu count={count} shopName={'Chris'} func={() => console.log('Hello Func!')}/>
             </div>
 
             <div className="col-lg-9">
@@ -51,6 +67,6 @@ const Home = () => (
         }
       `}</style>
     </div>
-);
+)};
 
 export default Home
