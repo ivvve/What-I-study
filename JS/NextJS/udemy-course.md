@@ -144,6 +144,7 @@ class Count extends React.Component<any, any> {
           {/* state 값 가져오기 */}
           <span>{this.state.count}</span>
         </div>
+      </>
     )
   }
 }
