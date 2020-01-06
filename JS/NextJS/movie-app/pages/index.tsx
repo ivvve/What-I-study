@@ -1,13 +1,30 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Head from 'next/head'
 import Navbar from "../components/navbar";
 import SideMenu from "../components/side-menu";
 import Carousel from "../components/carousel";
 import MovieList from "../components/movie-list";
 import Footer from "../components/footer";
-import {MOVIE_DATA} from "../resources/movie-data";
+import {getMovies, MOVIE_DATA, MovieType} from "../resources/movie-data";
 
 const Home = () => {
+  const [ movies, setMovies ] = useState<MovieType[]>([]);
+  const [ count, setCount ] = useState<number>(0);
+
+  // getMovies().then(movies => setMovies(movies)); // <- 항상 실행된다.
+
+  useEffect(() => {
+    console.log('Movie will be loaded');
+
+    // typescript 사용 시 async는 지원하지 않는다 그래서 아래와 같은 trick을 쓴다
+    const fetchMovies = async () => {
+      const movies = await getMovies();
+      setMovies(movies);
+    };
+
+    fetchMovies();
+  }, [count]);
+
   return (
     <div>
       <Head>
@@ -37,8 +54,11 @@ const Home = () => {
 
             <div className="col-lg-9">
               <Carousel/>
+
+              <button className="btn btn-warning" onClick={() => setCount(count + 1)}>Load movie</button>
+
               <div className="row">
-                <MovieList movies={MOVIE_DATA}/>
+                <MovieList movies={movies}/>
               </div>
             </div>
 

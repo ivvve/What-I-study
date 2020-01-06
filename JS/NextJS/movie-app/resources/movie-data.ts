@@ -1,4 +1,14 @@
-export const MOVIE_DATA = [
+export interface MovieType {
+  id: string;
+  name: string;
+  releaseYear: number;
+  description: string;
+  rating: number;
+  genre: string;
+  image: string;
+}
+
+export const MOVIE_DATA: MovieType[] = [
   {
     id: '1',
     name: 'The Shawshank Redemption',
@@ -27,3 +37,9 @@ export const MOVIE_DATA = [
     image: 'https://img.cinemablend.com/filter:scale/quill/0/f/5/2/a/6/0f52a6843a25c1a5c1f9a0c00548cad9e1d912e2.jpg?mw=600'
   }
 ];
+
+export function getMovies(): Promise<MovieType[]> {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(MOVIE_DATA), 0);
+  });
+}

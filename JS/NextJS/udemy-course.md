@@ -208,4 +208,49 @@ const SideMenu = (prop: Readonly<{ count: number, shopName: string, func: Functi
 
 ---
 
-- How web app works?
+- get async data
+
+
+아래와 같이 async로 데이터를 가져올 때 state를 사용하여 데이터를 가져오고 화면에 보여줄 수 있다.
+
+```ts
+export function getMovies(): Promise<MovieType[]> {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(MOVIE_DATA), 0);
+  });
+}
+```
+
+```tsx
+const [ movies, setMovies ] = useState<MovieType[]>([]);
+
+getMovies().then(movies => setMovies(movies));
+
+<MovieList movies={movies}/>
+```
+
+하지만 이 경우 시작할 때 한번만 실행되기 때문에 재사용성이 없다.
+`useEffect`를 쓰면 재사용성이 높은 state 관리를 할 수 있다.
+
+```tsx
+const [ movies, setMovies ] = useState<MovieType[]>([]);
+const [ count, setCount ] = useState<number>(0);
+
+// getMovies().then(movies => setMovies(movies));
+
+useEffect(() => {
+  console.log('Movie will be loaded');
+
+  // useEffect는 async는 지원하지 않는다 그래서 아래와 같은 trick을 쓴다
+  const fetchMovies = async () => {
+    const movies = await getMovies();
+    setMovies(movies);
+  };
+
+  fetchMovies();
+}, [count]); // <- 두 번째 인자인 state가 바뀔때도 useEffect 첫 번째 인자인 함수가 실행된다.
+
+<button className="btn btn-warning" onClick={() => setCount(count + 1)}>Load movie</button>
+// 버튼을 누르면 count state 값이 바뀌고 useEffect 첫 번째 인자인 함수가 실행된다.
+<MovieList movies={movies}/>
+```

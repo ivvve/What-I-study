@@ -8,7 +8,9 @@ npx create-next-app
 
 2. Add typescript dependencies
 
+```bash
 npm install --save-dev typescript @types/react @types/node
+```
 
 3. Change run scripts
 
