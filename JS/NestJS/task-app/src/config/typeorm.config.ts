@@ -1,5 +1,6 @@
 import {TypeOrmModuleOptions} from "@nestjs/typeorm";
 import {Task} from "../tasks/task.entity";
+import {User} from "../auth/user.entity";
 
 // @ts-ignore
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -9,7 +10,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: 'wave',
   password: 'wave1234',
   database: 'taskmanagement',
-  entities: [Task],
+  entities: [Task, User],
   synchronize: true,
   logging: 'all'
 };
