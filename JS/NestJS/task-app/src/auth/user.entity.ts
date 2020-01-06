@@ -1,4 +1,5 @@
 import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import * as bcrypy from 'bcrypt';
 
 @Entity()
 export class User extends BaseEntity {
@@ -11,14 +12,23 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  private constructor(username: string, password: string) {
+  @Column()
+  salt: string;
+
+  async isPasswordMatched(password: string): Promise<boolean> {
+    const hashedPassword = await bcrypy.hash(password, this.salt);
+    return (this.password === hashedPassword);
+  }
+
+  private constructor(username: string, password: string, salt: string) {
     super();
 
     this.username = username;
     this.password = password;
+    this.salt = salt;
   }
 
-  static newUser(username: string, password: string): User {
+  static newUser(username: string, password: string, salt: string): User {
     if (!username || username.length < 4) {
       throw new Error('username validation');
     }
@@ -27,6 +37,6 @@ export class User extends BaseEntity {
       throw new Error('password validation');
     }
 
-    return new User(username, password);
+    return new User(username, password, salt);
   }
 }

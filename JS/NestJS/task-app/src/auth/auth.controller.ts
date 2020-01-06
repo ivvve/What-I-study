@@ -14,4 +14,10 @@ export class AuthController {
     const { username, password } = authCredentialsDto;
     return this.authService.signUp(username, password);
   }
+
+  @Post('/sign-in')
+  signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<User> {
+    const { username, password } = authCredentialsDto;
+    return this.authService.signIn(username, password);
+  }
 }
