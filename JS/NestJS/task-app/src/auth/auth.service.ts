@@ -3,12 +3,15 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {UserRepository} from "./user.repository";
 import {User} from "./user.entity";
 import * as bcrypt from 'bcrypt';
+import {JwtService} from "@nestjs/jwt";
+import {AccessTokenDto} from "./dto/access-token.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
+    private jwtService: JwtService
   ) {}
 
   async signUp(username: string, password: string): Promise<User> {
@@ -25,7 +28,7 @@ export class AuthService {
     return this.userRepository.save(user);
   }
 
-  async signIn(username: string, password: string): Promise<User> {
+  async signIn(username: string, password: string): Promise<AccessTokenDto> {
     const user = await this.userRepository.findOne({ username });
 
     if (!user) {
@@ -38,6 +41,8 @@ export class AuthService {
       throw new UnauthorizedException('password not matched');
     }
 
-    return user;
+    const payload = { id: user.id, username };
+    const accessToken = this.jwtService.sign(payload);
+    return { accessToken };
   }
 }

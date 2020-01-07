@@ -162,3 +162,141 @@ if (search) {
 
 return query.getMany();
 ```
+
+----
+
+# auth
+
+## JWT token 적용
+
+- package 설
+
+```bash
+npm i @nestjs/jwt @nestjs/passport passport passport-jwt
+```
+
+- Module 설정
+
+```ts
+@Module({
+  imports: [
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
+    JwtModule.register({
+      secret: 'chris-secret-1234',
+      signOptions: {
+        expiresIn: 60 * 60
+      }
+    }),
+    TypeOrmModule.forFeature([User])
+  ],
+  controllers: [AuthController],
+  providers: [AuthService]
+})
+export class AuthModule {}
+```
+
+```ts
+@Injectable()
+export class AuthService {
+  constructor(
+    @InjectRepository(UserRepository)
+    private readonly userRepository: UserRepository,
+    private jwtService: JwtService // JWT service inject
+  ) {}
+
+  async signIn(username: string, password: string): Promise<AccessTokenDto> {
+    const user = await this.userRepository.findOne({ username });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const passwordMatched = await user.isPasswordMatched(password);
+
+    if (!passwordMatched) {
+      throw new UnauthorizedException('password not matched');
+    }
+
+    const payload = { id: user.id, username };
+    const accessToken = this.jwtService.sign(payload); // token 생성
+    return { accessToken };
+  }
+}
+```
+
+- token validation
+
+```ts
+import {PassportStrategy} from "@nestjs/passport";
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import {Injectable, UnauthorizedException} from "@nestjs/common";
+import {JwtPayload} from "./jwt-payload";
+import {InjectRepository} from "@nestjs/typeorm";
+import {UserRepository} from "./user.repository";
+import {User} from "./user.entity";
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository
+  ) {
+    super({
+      // bearer Auth 로 부터 읽어옴 (in Authorization header)
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: 'chris-secret-1234'
+    });
+  }
+
+  async validate(payload: JwtPayload): Promise<User> {
+    // request token을 decoding하여 payload를 가져옴
+    console.log(payload);
+
+    const user = await this.userRepository.findOne({ id: payload.id });
+
+    if (!user) {
+      throw new UnauthorizedException('user not found');
+    }
+
+    console.log('validate success');
+    return user;
+  }
+}
+```
+
+모듈에다가 위 설정을 추가한다.
+
+```ts
+@Module({
+  imports: [
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    }),
+    JwtModule.register({
+      secret: 'chris-secret-1234',
+      signOptions: {
+        expiresIn: 60 * 60
+      }
+    }),
+    TypeOrmModule.forFeature([User])
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy], // 위에 만든 JwtStrategy 추가
+  exports: [JwtStrategy, PassportModule] // export
+})
+export class AuthModule {}
+```
+
+```ts
+@Controller()
+export class AuthController {
+  @Post('/test')
+  @UseGuards(AuthGuard()) // @UserGuards(AuthGuard())를 추가한다
+  test(@Req() req) {
+    console.log('req-----------');
+    console.log(req);
+  }
+}
+```
