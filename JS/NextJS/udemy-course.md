@@ -254,3 +254,124 @@ useEffect(() => {
 // 버튼을 누르면 count state 값이 바뀌고 useEffect 첫 번째 인자인 함수가 실행된다.
 <MovieList movies={movies}/>
 ```
+
+---
+
+```tsx
+// class를 쓴다면 아래와 같이 코드를 짜야한다.
+constructor() {
+  this.state = {
+    movies: []
+  }
+}
+
+// call only once when component is mounted
+async componentDidMount() {
+  const movies = await getMovies();
+  this.setState({ movies });
+}
+```
+
+---
+
+- error handling
+
+error message 출력은 state를 사용해서 출력한다
+
+
+
+---
+
+# SSR
+
+components에 있는 Component에 적용할 수 없고 pages에 있는 Component들만 사용가능하다.
+
+---
+
+- Link
+
+anchor tag의 href 속성을 사용하지 않고 `import Link from "next/link"`의 `Link`를 사용한다.
+
+```tsx
+<ul className="navbar-nav ml-auto">
+  <li className="nav-item active">
+    <Link href="/">
+      <a className="nav-link" href="#">Home
+        <span className="sr-only">(current)</span>
+      </a>
+    </Link>
+  </li>
+  <li className="nav-item">
+    <Link href="/about">
+      <a className="nav-link">About</a>
+    </Link>
+  </li>
+  <li className="nav-item">
+    <Link href="services">
+      <a className="nav-link">Services</a>
+    </Link>
+  </li>
+  <li className="nav-item">
+    <Link href="contact">
+      <a className="nav-link" href="#">Contact</a>
+    </Link>
+  </li>
+</ul>
+```
+
+---
+
+# App container
+
+_app.js or _app.tsx에 app contaner를 설정한다
+
+```tsx
+// _app.tsx
+import App from "next/app";
+import Head from "next/head";
+import Navbar from "../components/navbar";
+import React from "react";
+import Footer from "../components/footer";
+
+class MovieApp extends App {
+  render(): JSX.Element {
+    const { Component } = this.props;
+
+    return (
+      <div>
+        <Head>
+          <title>Home</title>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                crossOrigin="anonymous"/>
+          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                  crossOrigin="anonymous"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                  crossOrigin="anonymous"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                  crossOrigin="anonymous"></script>
+        </Head>
+
+        <Navbar/>
+
+        <div className="base-page">
+          <Component />
+        </div>
+
+        <Footer/>
+
+        <style jsx>{`
+          .base-page {
+            padding-top: 80px;
+          }
+        `}</style>
+      </div>
+    )
+  }
+}
+
+export default MovieApp;
+```
