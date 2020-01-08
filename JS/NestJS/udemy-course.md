@@ -300,3 +300,37 @@ export class AuthController {
   }
 }
 ```
+
+---
+
+custom get user decorator
+
+```ts
+import {createParamDecorator} from "@nestjs/common";
+import {User} from "./user.entity";
+
+export const GetUser = createParamDecorator((data, req): User => {
+  console.log(req);
+  return req.user;
+});
+```
+
+```ts
+@Post('/test')
+@UseGuards(AuthGuard())
+test(@GetUser() user) {
+  console.log('user-----------');
+  console.log(user); // JwtStrategy.validate에서 return한 User
+}
+```
+
+---
+
+Controller에 모든 요청에 guard 씌우기
+
+```ts
+@Controller('tasks')
+@UseGuards(AuthGuard('jwt'))
+export class TasksController {
+}
+```
