@@ -11,7 +11,7 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import {Task} from "./task.entity";
+import {Task} from "./task/task.entity";
 import {CreateTaskDto} from "./dto/create-task.dto";
 import {UpdateTaskDto} from "./dto/update-task.dto";
 import {GetTasksFilterDto} from "./dto/get-tasks-filter.dto";
@@ -19,8 +19,8 @@ import * as _ from 'lodash';
 import {TaskStatusValidationPipe} from "./pipes/task-status-validation.pipe";
 import {TasksService} from "./tasks.service";
 import {AuthGuard} from "@nestjs/passport";
-import {GetUser} from "../auth/get-user.decorator";
-import {User} from "../auth/user.entity";
+import {GetUser} from "../auth/user/get-user.decorator";
+import {User} from "../auth/user/user.entity";
 
 @Controller('tasks')
 @UseGuards(AuthGuard('jwt'))

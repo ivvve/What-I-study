@@ -56,12 +56,9 @@ npm run start:dev
 
 ![](./images/pipes-01.png)
 
-
----
-
 ## ORM using Typeorm
 
-- entity
+- Entity
 
 ```ts
 @Entity()
@@ -91,8 +88,21 @@ export class Task extends BaseEntity {
 }
 ```
 
-- entity 등록
+- Repository
+
 ```ts
+import {EntityRepository, Repository} from "typeorm";
+import {Task} from "./task.entity";
+
+@EntityRepository(Task)
+export class TaskRepository extends Repository<Task> {
+}
+```
+
+- Typeorm configuration
+
+```ts
+// typeorm.config.ts
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: '127.0.0.1',
@@ -106,12 +116,13 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 };
 ```
 
-```ts
+- Module configuration
 
+```ts
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig), // config
-    TypeOrmModule.forFeature([TaskRepository]) // repository
+    TypeOrmModule.forRoot(typeOrmConfig), // Typeorm config
+    TypeOrmModule.forFeature([TaskRepository]) // registering repository
   ],
   controllers: [TasksController],
   providers: [TasksService]
@@ -119,32 +130,24 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 export class TasksModule {}
 ```
 
-- repository
+- using in other injectable components
 
-```ts
-import {EntityRepository, Repository} from "typeorm";
-import {Task} from "./task.entity";
-
-@EntityRepository(Task)
-export class TaskRepository extends Repository<Task> {
-}
-```
-
-가져다 쓸 때는 
 ```ts
 @Injectable()
 export class TasksService {
   constructor(
+    // @InjectRepository decorator
     @InjectRepository(TaskRepository)
     private readonly taskRepository: TaskRepository
   ) {}
 }
 ```
 
-- query builder
+### Using query builder
 
 ```ts
-// parameter는 alias로 아래 query에서 사용된다
+// Repository.createQueryBuilder()로 query builder를 생성한다.
+// parameter는 alias로 query에서 사용된다
 const query = this.taskRepository.createQueryBuilder('task');
 
 if (status) {
@@ -157,25 +160,53 @@ if (search) {
   // 이렇게 query가 생성된다
   query.andWhere(
     '(task.description LIKE :search OR task.title LIKE :search)',
-    { search: `%${search}%` });
+    { search: `%${search}%` }
+  );
 }
 
 return query.getMany();
 ```
 
-----
+## Password Security
 
-# auth
+password를 hashing 하기 위해 bcrypt를 생성한다
 
-## JWT token 적용
+```ts
+import * as bcrypt from 'bcrypt';
 
-- package 설
+@Injectable()
+export class AuthService {
+  constructor(
+    @InjectRepository(UserRepository)
+    private readonly userRepository: UserRepository,
+  ) {}
+
+  async signUp(username: string, password: string): Promise<User> {
+    const existingUser = await this.userRepository.findOne({ username });
+
+    if (existingUser) {
+      throw new ConflictException(`User with the username(${username}) is already existing`);
+    }
+
+    // bcrypt에서 salt를 사용한 hashing을 지원한다
+    const salt = await bcrypt.genSalt();
+    password = await bcrypt.hash(password, salt);
+
+    const user = User.newUser(username, password, salt); // salt도 저장해야한다
+    return this.userRepository.save(user);
+  }
+}
+```
+
+## JWT Auth
+
+- package 추가
 
 ```bash
 npm i @nestjs/jwt @nestjs/passport passport passport-jwt
 ```
 
-- Module 설정
+- Module configuration
 
 ```ts
 @Module({
@@ -184,9 +215,9 @@ npm i @nestjs/jwt @nestjs/passport passport passport-jwt
       defaultStrategy: 'jwt'
     }),
     JwtModule.register({
-      secret: 'chris-secret-1234',
+      secret: 'chris-secret-1234', // JWT signature
       signOptions: {
-        expiresIn: 60 * 60
+        expiresIn: 60 * 60 // expire time
       }
     }),
     TypeOrmModule.forFeature([User])
@@ -197,13 +228,15 @@ npm i @nestjs/jwt @nestjs/passport passport passport-jwt
 export class AuthModule {}
 ```
 
+- Generate token
+
 ```ts
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
-    private jwtService: JwtService // JWT service inject
+    private jwtService: JwtService // NestJS에서 제공하며 inject해서 쓸 수 있다
   ) {}
 
   async signIn(username: string, password: string): Promise<AccessTokenDto> {
@@ -219,14 +252,15 @@ export class AuthService {
       throw new UnauthorizedException('password not matched');
     }
 
+    // token 생성
     const payload = { id: user.id, username };
-    const accessToken = this.jwtService.sign(payload); // token 생성
+    const accessToken = this.jwtService.sign(payload);
     return { accessToken };
   }
 }
 ```
 
-- token validation
+- Validation token
 
 ```ts
 import {PassportStrategy} from "@nestjs/passport";
@@ -250,23 +284,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // Authorization header의 bearer token을 decoding하여 payload를 파라미터로 가져온다
   async validate(payload: JwtPayload): Promise<User> {
-    // request token을 decoding하여 payload를 가져옴
-    console.log(payload);
-
     const user = await this.userRepository.findOne({ id: payload.id });
 
     if (!user) {
-      throw new UnauthorizedException('user not found');
+      throw new UnauthorizedException('User not found');
     }
 
-    console.log('validate success');
     return user;
   }
 }
 ```
 
-모듈에다가 위 설정을 추가한다.
+- Add Custom JwtStrategy
 
 ```ts
 @Module({
@@ -283,34 +314,34 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     TypeOrmModule.forFeature([User])
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy], // 위에 만든 JwtStrategy 추가
+  providers: [AuthService, JwtStrategy], // 앞에서 만든 JwtStrategy를 추가
   exports: [JwtStrategy, PassportModule] // export
 })
 export class AuthModule {}
 ```
 
+- JwtStrategy 적용하기
+
 ```ts
 @Controller()
 export class AuthController {
   @Post('/test')
-  @UseGuards(AuthGuard()) // @UserGuards(AuthGuard())를 추가한다
+  @UseGuards(AuthGuard()) // <- @UserGuards(AuthGuard())
   test(@Req() req) {
-    console.log('req-----------');
-    console.log(req);
+    // JwtStrategy.validate에서 return한 user
+    console.log(req.user);
   }
 }
 ```
 
----
-
-custom get user decorator
+- Using custom @GetUser decorator
 
 ```ts
 import {createParamDecorator} from "@nestjs/common";
 import {User} from "./user.entity";
 
 export const GetUser = createParamDecorator((data, req): User => {
-  console.log(req);
+  // JwtStrategy.validate에서 return한 User
   return req.user;
 });
 ```
@@ -319,18 +350,15 @@ export const GetUser = createParamDecorator((data, req): User => {
 @Post('/test')
 @UseGuards(AuthGuard())
 test(@GetUser() user) {
-  console.log('user-----------');
-  console.log(user); // JwtStrategy.validate에서 return한 User
+  console.log(user);
 }
 ```
 
----
-
-Controller에 모든 요청에 guard 씌우기
+- Controller에 모든 요청에 AuthGuard 씌우기
 
 ```ts
 @Controller('tasks')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt')) // 해당 Controller의 모든 요청은 Bearer Token을 확인한다
 export class TasksController {
-}
+}g
 ```

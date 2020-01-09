@@ -1,6 +1,6 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import * as bcrypy from 'bcrypt';
-import {Task} from "../tasks/task.entity";
+import {Task} from "../../tasks/task/task.entity";
 
 @Entity()
 export class User extends BaseEntity {

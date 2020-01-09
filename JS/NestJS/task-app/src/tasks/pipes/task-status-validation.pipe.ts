@@ -1,5 +1,5 @@
 import {ArgumentMetadata, BadRequestException, PipeTransform} from "@nestjs/common";
-import {TaskStatus} from "../task-status.enum";
+import {TaskStatus} from "../task/task-status.enum";
 
 export class TaskStatusValidationPipe implements PipeTransform {
   private readonly statuses = [

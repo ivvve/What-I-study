@@ -1,7 +1,7 @@
 import {ConflictException, Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {UserRepository} from "./user.repository";
-import {User} from "./user.entity";
+import {UserRepository} from "./user/user.repository";
+import {User} from "./user/user.entity";
 import * as bcrypt from 'bcrypt';
 import {JwtService} from "@nestjs/jwt";
 import {AccessTokenDto} from "./dto/access-token.dto";

@@ -1,6 +1,6 @@
 import {TypeOrmModuleOptions} from "@nestjs/typeorm";
-import {Task} from "../tasks/task.entity";
-import {User} from "../auth/user.entity";
+import {Task} from "../tasks/task/task.entity";
+import {User} from "../auth/user/user.entity";
 
 // @ts-ignore
 export const typeOrmConfig: TypeOrmModuleOptions = {
