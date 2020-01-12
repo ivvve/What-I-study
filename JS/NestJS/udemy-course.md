@@ -424,3 +424,44 @@ export class TasksController {
 [Nest] 74717   - 01/12/2020, 12:57:10 PM   [TasksController] TasksController.getAllTasks called
 [Nest] 74717   - 01/12/2020, 12:57:10 PM   [TasksController] user (chris) try to get all task
 ```
+
+## Config
+
+- config package 설치
+
+```bash
+npm i config
+```
+
+project root directory에 config 파일들을 세팅한다
+
+![](./images/config-01.png)
+
+```yaml
+server:
+  port: 3000
+
+db:
+  type: 'poatgres'
+  host: 'localhost'
+  port: 8300
+  database: 'taskmanagement'
+
+jwt:
+  expiresIn: 3600
+```
+
+---
+
+`local.yml`로 생성하니 stage에 상관없이 local.yml을 읽더라...
+
+---
+
+- config를 통해 configuration value 가져오기
+
+```ts
+import * as config from 'config';
+
+console.log(config.get('server'));
+```
+
