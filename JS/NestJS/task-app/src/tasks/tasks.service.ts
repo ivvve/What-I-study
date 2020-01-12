@@ -12,12 +12,13 @@ export class TasksService {
     private readonly taskRepository: TaskRepository
   ) {}
 
-  getAllTasks(): Promise<Task[]> {
-    return this.taskRepository.find();
+  getAllTasks(user: User): Promise<Task[]> {
+    return this.taskRepository.find({ user });
   }
 
-  getFilteredTasks(status: TaskStatus, search: string): Promise<Task[]> {
+  getFilteredTasks(user: User, status: TaskStatus, search: string): Promise<Task[]> {
     const query = this.taskRepository.createQueryBuilder('task');
+    query.where('task.userId = :userId', { userId: user.id });
 
     if (status) {
       query.andWhere('task.status = :status', { status });
@@ -32,8 +33,10 @@ export class TasksService {
     return query.getMany();
   }
 
-  async getTaskById(id: number): Promise<Task> {
-    const task = await this.taskRepository.findOne(id);
+  async getTaskById(id: number, user: User): Promise<Task> {
+    const task = await this.taskRepository.findOne({
+      where: { id, userId: user.id }
+    });
 
     if (!task) {
       throw new NotFoundException('Task not found');
@@ -48,14 +51,14 @@ export class TasksService {
     return task;
   }
 
-  async deleteTask(id: number): Promise<boolean> {
-    const task = await this.getTaskById(id);
+  async deleteTask(id: number, user: User): Promise<boolean> {
+    const task = await this.getTaskById(id, user);
     await this.taskRepository.remove(task);
     return true;
   }
 
-  async updateTask(id: number, status: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
+  async updateTask(id: number, user: User, status: TaskStatus): Promise<Task> {
+    const task = await this.getTaskById(id, user);
     task.changeStatus(status);
     return task.save();
   }

@@ -362,3 +362,65 @@ test(@GetUser() user) {
 export class TasksController {
 }g
 ```
+
+## Logging
+
+### Logging Level
+
+- Log: application 실행이나 port와 같은 일반적인 로그
+- Warning: 치명적이지 않지만 핸들링되지 않은 문제에 대한 로그
+- Error: 치명적이고 핸들링되지 않은 문제에 대한 로그
+- Debug: 개발자 debugging용 로그
+- Verbose: application 내부의 행동을 확인할 수 있게 해주는 로그들
+
+- Logger 사용하기
+
+```ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import {Logger} from "@nestjs/common";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, { 
+    logger: ['log', 'warn', 'error', 'debug'] // log level 정의
+  });
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+```ts
+@Controller('tasks')
+@UseGuards(AuthGuard('jwt'))
+export class TasksController {
+  private logger = new Logger('TasksController');
+
+  constructor(
+    private readonly tasksService:TasksService
+  ) {}
+
+  @Get()
+  getAllTasks(
+    @Query(ValidationPipe) getTasksFilterDto: GetTasksFilterDto,
+    @GetUser() user: User
+  ): Promise<Task[]> {
+    this.logger.log('TasksController.getAllTasks called');
+    this.logger.debug(`user (${user.username}) try to get all task`);
+    this.logger.verbose(`filter ${JSON.stringify(getTasksFilterDto)}`);
+
+    if (_.isEmpty(getTasksFilterDto)) {
+      return this.tasksService.getAllTasks(user);
+    }
+
+    const { status, search } = getTasksFilterDto;
+    return this.tasksService.getFilteredTasks(user, status, search);
+  }
+}
+```
+
+`verbose`는 log level에 추가하지 않았기 때문에 logging 되지 않는다
+
+```bash
+[Nest] 74717   - 01/12/2020, 12:57:10 PM   [TasksController] TasksController.getAllTasks called
+[Nest] 74717   - 01/12/2020, 12:57:10 PM   [TasksController] user (chris) try to get all task
+```
