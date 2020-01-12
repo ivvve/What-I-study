@@ -4,7 +4,9 @@ https://nextjs.org/learn/excel/typescript/setup
 
 1. Make NextJS app
 
+```bash
 npx create-next-app
+```
 
 2. Add typescript dependencies
 

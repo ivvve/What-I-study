@@ -5,6 +5,7 @@ import React from "react";
 import Footer from "../components/footer";
 
 class MovieApp extends App {
+
   render(): JSX.Element {
     const { Component } = this.props;
 

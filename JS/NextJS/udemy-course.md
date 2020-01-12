@@ -206,10 +206,7 @@ const SideMenu = (prop: Readonly<{ count: number, shopName: string, func: Functi
 };
 ```
 
----
-
-- get async data
-
+## useEffect
 
 아래와 같이 async로 데이터를 가져올 때 state를 사용하여 데이터를 가져오고 화면에 보여줄 수 있다.
 
@@ -255,8 +252,6 @@ useEffect(() => {
 <MovieList movies={movies}/>
 ```
 
----
-
 ```tsx
 // class를 쓴다면 아래와 같이 코드를 짜야한다.
 constructor() {
@@ -272,23 +267,14 @@ async componentDidMount() {
 }
 ```
 
----
-
-- error handling
-
-error message 출력은 state를 사용해서 출력한다
-
-
-
----
-
-# SSR
+## SSR
 
 components에 있는 Component에 적용할 수 없고 pages에 있는 Component들만 사용가능하다.
 
----
+getInitialProps를 통해 사용함
 
-- Link
+
+## Link
 
 anchor tag의 href 속성을 사용하지 않고 `import Link from "next/link"`의 `Link`를 사용한다.
 
@@ -319,11 +305,9 @@ anchor tag의 href 속성을 사용하지 않고 `import Link from "next/link"`�
 </ul>
 ```
 
----
+## App container
 
-# App container
-
-_app.js or _app.tsx에 app contaner를 설정한다
+`_app.js` or `_app.tsx`에 app contaner를 설정한다.
 
 ```tsx
 // _app.tsx
@@ -374,4 +358,51 @@ class MovieApp extends App {
 }
 
 export default MovieApp;
+```
+
+다른 페이지는 이제 `<Component />`에 위치하게 된다.
+
+## ID 별로 다른 페이지 처리하기
+
+URL을 `/movies/:id` 라고 하면
+아래와 같이 pages에 추가한다.
+
+![](./images/page-param-01.png)
+
+```tsx
+import {useRouter} from "next/router";
+
+export default function Movie() {
+  const { query } = useRouter();
+
+  return (
+    <div className="container">
+      <h1>Movie with id: { query.id }</h1>
+    </div>
+  )
+};
+```
+
+- SSR을 사용하여 화면에 표시하기
+
+```tsx
+import {useRouter} from "next/router";
+
+const Movie = (props: any) => {
+  const { movie } = props;
+
+  return (
+    <div className="container">
+      <h1>Movie with id: { query.id }</h1>
+      <h2>movie.title</h2>
+    </div>
+  )
+};
+
+Movie.getInitialProps = (props: { query: { id: string } }) => {
+  const movie = await getMovieById(props.query.id);
+  return { movie };
+};
+
+export default Movie;
 ```

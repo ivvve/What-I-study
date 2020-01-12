@@ -8,7 +8,8 @@ import Footer from "../components/footer";
 import {getMovies, MOVIE_DATA, MovieType} from "../resources/movie-data";
 
 const Home = (props: any) => {
-  // server side rendering 이후 한 번 실행된다
+  // 여기 코드는 처음에 Server Side Rendering을 할 때 실행이 되고,
+  // 브라우저에 렌더된 후에도 다시 실행된다
   console.log('-----------------');
   console.log(props);
   console.log('-----------------');
@@ -16,24 +17,7 @@ const Home = (props: any) => {
   const [ movies, setMovies ] = useState<MovieType[]>([]);
   const [ count, setCount ] = useState<number>(0);
 
-/*  // class를 쓴다면 아래와 같이 코드를 짜야한다.
-  constructor() {
-    this.state = {
-      movies: []
-    }
-  }
-
-  // call only once when component is mounted
-  async componentDidMount() {
-    const movies = await getMovies();
-    this.setState({ movies });
-  }*/
-
-  // getMovies().then(movies => setMovies(movies)); // <- 항상 실행된다.
-
   useEffect(() => {
-    console.log('Movie will be loaded');
-
     // typescript 사용 시 async는 지원하지 않는다 그래서 아래와 같은 trick을 쓴다
     const fetchMovies = async () => {
       const movies = await getMovies();
@@ -41,7 +25,7 @@ const Home = (props: any) => {
     };
 
     fetchMovies();
-  }, [count]);
+  }, [count]); // count state가 바뀔 때 마다 useEffect의 첫번째 인자 함수가 실행된다
 
   return (
     <div>
@@ -73,7 +57,6 @@ const Home = (props: any) => {
 // Get props from server
 Home.getInitialProps = async () => {
   const movies = await getMovies();
-
   console.log('log from server!');
 
   // 전부 다 처리된 후에 이 props로 dom을 그린 뒤에

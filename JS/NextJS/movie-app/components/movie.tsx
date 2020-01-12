@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Movie = (movie: Readonly<{
     id: string, name: string, releaseYear: number,
@@ -9,7 +10,9 @@ const Movie = (movie: Readonly<{
   return (
     <div key={id} className="col-lg-4 col-md-6 mb-4">
       <div className="card h-100">
-        <a href="#"><img className="card-img-top" src={image} alt=""/></a>
+        <Link href={`/movies/${id}`}>
+          <a><img className="card-img-top" src={image} alt=""/></a>
+        </Link>
         <div className="card-body">
           <h4 className="card-title">
             <a href="#">{name}</a>
