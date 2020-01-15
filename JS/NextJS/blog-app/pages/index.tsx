@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 import BaseLayout from "../components/base-layout";
 
-export default function About() {
+export default function Home() {
   return (
     <BaseLayout>
-      <h1>I'm About!</h1>
+      <h1>I'm index</h1>
     </BaseLayout>
   )
 }

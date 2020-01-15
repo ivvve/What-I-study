@@ -19,10 +19,10 @@ npm run dev
 
 http://localhost:3000/
 
-- Nav component
+- Header component
 
 index.js의 Nav는 components의 nav.js이다.
-이를 주석처리하면 index 페이지 상단에 Nav bar가 없어지는 걸 확인할 수 있다.
+이를 주석처리하면 index 페이지 상단에 Header bar가 없어지는 걸 확인할 수 있다.
 
 ## Functional Components
 
@@ -405,4 +405,43 @@ Movie.getInitialProps = (props: { query: { id: string } }) => {
 };
 
 export default Movie;
+```
+
+---
+
+# Blog app
+
+Component로 layout 짜기
+
+```tsx
+// components/base-layout.tsx
+import React from "react";
+import Header from "./common/header";
+
+type BaseLayoutProps = {
+  children: React.ReactNode;
+}
+
+export default function BaseLayout({ children }: BaseLayoutProps) {
+  return (
+    <>
+      <Header/>
+      { children }
+    </>
+  )
+}
+```
+
+```tsx
+// pages/index.tsx
+import React from 'react'
+import BaseLayout from "../components/base-layout";
+
+export default function Home() {
+  return (
+    <BaseLayout>
+      <h1>I'm index</h1>
+    </BaseLayout>
+  )
+}
 ```
