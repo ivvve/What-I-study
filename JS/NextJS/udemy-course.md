@@ -445,3 +445,50 @@ export default function Home() {
   )
 }
 ```
+
+## Sass 적용하기
+
+https://github.com/zeit/next-plugins/tree/master/packages/next-sass
+
+npm install --save @zeit/next-sass node-sass
+
+![](2020-01-16-09-22-03.png)
+
+next.config.js를 만들고 설정한다
+
+```js
+// /next.config.js
+const withSass = require('@zeit/next-sass');
+module.exports = withSass();
+```
+
+![](2020-01-16-09-23-01.png)
+
+```tsx
+import Link from "next/link";
+import React from "react";
+
+import '../../styles/main.scss'; // scss 파일을 불러온다
+
+export default function Header() {
+  return (
+    <div>
+      <Link href='/'><a>Index</a></Link>
+      <Link href='/about'><a>About</a></Link>
+      <Link href='/blogs'><a>Blogs</a></Link>
+      <Link href='/portfolios'><a>Portfolios</a></Link>
+      <Link href='/cv'><a>cv</a></Link>
+
+      <p className='customClass'>Styles!</p>
+
+      <style jsx>
+        {`
+          a {
+            font-size: 20px;
+          };
+        `}
+      </style>
+    </div>
+  );
+}
+```
