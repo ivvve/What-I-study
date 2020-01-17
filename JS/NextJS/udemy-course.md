@@ -273,6 +273,30 @@ components에 있는 Component에 적용할 수 없고 pages에 있는 Component
 
 getInitialProps를 통해 사용함
 
+```tsx
+import React, {useEffect} from 'react'
+import BaseLayout from "../components/base-layout";
+
+export default function Home({ message }) {
+  console.log(message);
+
+  useEffect(() => {
+    console.log('use effect');
+  });
+
+  console.log('before');
+
+  return (
+    <BaseLayout>
+      <h1>I'm index</h1>
+    </BaseLayout>
+  )
+}
+
+Home.getInitialProps = async () => {
+  return { message: 'message from server' }
+};
+```
 
 ## Link
 
@@ -492,3 +516,5 @@ export default function Header() {
   );
 }
 ```
+
+
