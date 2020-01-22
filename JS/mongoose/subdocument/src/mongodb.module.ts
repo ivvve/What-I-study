@@ -4,6 +4,10 @@ import {RelationshipSchema} from "./relationship/domain/relationship.entity";
 
 @Module({
   imports: [
+    MongooseModule.forRoot('mongodb://127.0.0.1:8101/relationship', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }),
     MongooseModule.forFeature([
       { name: 'relationships', collection: 'relationships', schema: RelationshipSchema }
     ])

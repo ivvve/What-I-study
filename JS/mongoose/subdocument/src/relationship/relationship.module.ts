@@ -8,7 +8,9 @@ import {BlockRelationshipService} from "./app/block-relationship.service";
 import {MongodbModule} from "../mongodb.module";
 
 @Module({
-  imports: [MongodbModule],
+  imports: [
+    MongodbModule
+  ],
   controllers: [
     FriendshipController,
     BlockRelationshipController
