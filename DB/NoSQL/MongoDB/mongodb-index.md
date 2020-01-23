@@ -81,6 +81,15 @@ query에 compound index key가 있더라도 compound index 순서에 따라 inde
 3개의 복합 키를 가진 인덱스는 필요할 수 있으나, 단일 키 인덱스보다 더 많은 공간을 필요로한다.
 => 인덱스는 필요한 키만 가지고 있어야한다.
 
+참고: https://docs.mongodb.com/manual/tutorial/ensure-indexes-fit-ram/
+
+- index가 Document update 성능에 어떤 영향을 주는가?
+
+indexing된 필드를 수정할 경우, MongoDB는 모든 index를 수정한다.
+그렇기 때문에 애플리켄이션이 write-heavy 하다면, index가 성능에 영향을 준다.
+
+출처: https://docs.mongodb.com/manual/faq/indexes/#how-do-write-operations-affect-indexes
+
 ## Dense Indexes (밀집 인덱스) vs Sparse Indexes (희소 인덱스)
 
 - 밀집: 도큐먼트가 인덱스 키를 가지고 있지 않더라도 인덱스에는 해당 엔트리가 존재함
