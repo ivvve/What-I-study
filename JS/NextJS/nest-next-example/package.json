@@ -1,0 +1,37 @@
+{
+  "name": "nestnext8",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/main.ts",
+    "build:clean": "rimraf .next",
+    "build:ui": "npx next build",
+    "build:server": "npx tsc --project tsconfig.server.json && npx babel .next/production-server -d .next/production-server --extensions \".js\"",
+    "build": "npm build:clean && npm build:ui && npm build:server",
+    "start": "cross-env NODE_ENV=production node .next/production-server/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^6.5.3",
+    "@nestjs/core": "^6.5.3",
+    "@nestjs/platform-express": "^6.5.3",
+    "@types/uuid": "^3.4.6",
+    "cross-env": "^6.0.3",
+    "nest-next": "^9.1.0",
+    "next": "^9.0.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2",
+    "uuid": "^3.4.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@types/node": "^12.7.1",
+    "@types/react": "^16.9.1",
+    "rimraf": "^3.0.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
