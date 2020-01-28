@@ -6,7 +6,7 @@
 
 query를 실행할 때 성능을 위해선 해당 query에 index가 걸리는지 확인하는 것은 중요하다.
 index를 생성한 뒤 해당 index를 제대로 타는지 확인하기 위해서 query에 explain()을 추가하여 query를 분석한다.
-explain은 query에 대한 자세한 정보룰 보여준다.
+explain은 query에 대한 자세한 정보를 보여준다.
 
 ![](./images/performance-tips-explain-01.png)
 
