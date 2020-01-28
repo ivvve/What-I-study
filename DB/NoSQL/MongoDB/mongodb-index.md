@@ -43,7 +43,9 @@ B-Tree는
 
 ![](./images/mongodb-index-05.png)
 
-낮은 가격 순으로 정렬하고 싶을 때 (제조사 1, 가격 1) index를 참고할 수 있을까?
+> Q: 낮은 가격 순으로 정렬하고 싶을 때 (제조사 1, 가격 1) index를 참고할 수 있을까?
+
+A: 없다
 
 ![](./images/mongodb-index-06.png)
 
@@ -128,4 +130,5 @@ db.collection.createIndex( { x: 1 }, { sparse: true } );
 ---
 
 - 참고
-- [인덱싱 전략](https://docs.mongodb.com/manual/applications/indexes/)
+- [indexing 전략](https://docs.mongodb.com/manual/applications/indexes/)
+- [index 설계 전략](https://blog.ull.im/engineering/2019/04/05/mongodb-indexing-strategy.html)

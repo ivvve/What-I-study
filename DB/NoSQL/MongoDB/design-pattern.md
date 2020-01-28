@@ -64,12 +64,12 @@ https://www.mongodb.com/blog/post/building-with-patterns-a-summary
 
 ```json
 {
-    title: "Star Wars",
-    director: "George Lucas",
-    release_US: ISODate("1977-05-20T01:00:00+01:00"),
-    release_France: ISODate("1977-10-19T01:00:00+01:00"),
-    release_Italy: ISODate("1977-10-20T01:00:00+01:00"),
-    release_UK: ISODate("1977-12-27T01:00:00+01:00")
+    "title": "Star Wars",
+    "director": "George Lucas",
+    "release_US": ISODate("1977-05-20T01:00:00+01:00"),
+    "release_France": ISODate("1977-10-19T01:00:00+01:00"),
+    "release_Italy": ISODate("1977-10-20T01:00:00+01:00"),
+    "release_UK": ISODate("1977-12-27T01:00:00+01:00")
 }
 ```
 
@@ -86,24 +86,24 @@ https://www.mongodb.com/blog/post/building-with-patterns-a-summary
 
 ```json
 {
-    title: "Star Wars",
-    director: "George Lucas",
-    releases: [
+    "title": "Star Wars",
+    "director": "George Lucas",
+    "releases": [
         {
-            location: "USA",
-            date: ISODate("1977-05-20T01:00:00+01:00")
+            "location": "USA",
+            "date": ISODate("1977-05-20T01:00:00+01:00")
         },
         {
-            location: "France",
-            date: ISODate("1977-10-19T01:00:00+01:00")
+            "location": "France",
+            "date": ISODate("1977-10-19T01:00:00+01:00")
         },
         {
-            location: "Italy",
-            date: ISODate("1977-10-20T01:00:00+01:00")
+            "location": "Italy",
+            "date": ISODate("1977-10-20T01:00:00+01:00")
         },
         {
-            location: "UK",
-            date: ISODate("1977-12-27T01:00:00+01:00")
+            "location": "UK",
+            "date": ISODate("1977-12-27T01:00:00+01:00")
         }
     ]
 }
