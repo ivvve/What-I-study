@@ -9,3 +9,9 @@ node_modules
 
 # Typescript files
 dist
+
+# Java compiled files
+out
+
+# Rust compiled files
+target
