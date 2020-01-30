@@ -3,9 +3,9 @@ package _2020._01;
 import java.util.*;
 
 // https://leetcode.com/problems/fizz-buzz/
-public class _30_FizzBuzz {
+public class _29_FizzBuzz {
     public static void main(String[] args) {
-        System.out.println(new _30_FizzBuzz().fizzBuzz(15));
+        System.out.println(new _29_FizzBuzz().fizzBuzz(15));
     }
 
     public List<String> fizzBuzz(final int n) {
