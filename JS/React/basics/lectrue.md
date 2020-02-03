@@ -27,23 +27,31 @@ React.createElement("div", null, React.createElement("span", null, "Hello React"
 
 3. javascript 값을 사용하고 싶을 땐 {}로 감싼다
 
+```jsx
 function Hello() {
   const name = 'devson';
   return <div>안녕하세요 {name}</div>
 }
+```
  
 4. css
-그냥 불러오기만 하면 됨
+import로 불러오기만 하면 된다.
 
+```jsx
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.css'; // 
 
 function App() {
   return (
+    ...
+  )
+}
+```
 
-인라
+inline style 선언은 `style` property에 한다
 
+```jsx
 function Hello() {
   const name = 'devson';
   const style = {
@@ -52,18 +60,23 @@ function Hello() {
 
   return <div style={style}>안녕하세요 {name}</div>
 }
+```
 
 5. class 대신 className
 
 6. 주석
+
+```jsx
 {/* comments */}
 
 <Hello
   // comments
 />
+```
 
 ## props
 
+```jsx
 function App() {
   return (
     <>
@@ -72,11 +85,11 @@ function App() {
     </>
   );
 }
+```
 
 ```jsx
 function Hello(props) {
   console.log(props);
-
   return <div>안녕하세요 {props.name}</div>
 }
 
@@ -86,4 +99,150 @@ Hello.defaultProps = {
 };
 
 export default Hello;
+```
+
+### 조건부 렌더링
+
+```jsx
+function Hello(props) {
+  const { isSpecial } = props;
+
+  console.log(props);
+  const style = {
+    backgroundColor: 'yellow'
+  }
+
+  // prop으로 받은 값을 조건문에 넣는다
+  if (isSpecial) {
+    return <div>**</div>
+  }
+
+  return <div style={style}>안녕하세요 {props.name}</div>
+}
+```
+
+### useState로 상태 관리하기
+
+```jsx
+import React, {useState} from 'react';
+
+function Counter() {
+  const [count, setCounter] = useState(0);
+
+  const onIncrease = () => {
+    setCounter(count + 1);
+  }
+
+  const onDecrease = () => {
+    setCounter(count - 1);
+  }
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  )
+}
+
+export default Counter;
+```
+
+#### input 상태 관리하기
+
+```jsx
+import React, {useState} from "react";
+
+function InputSample() {
+  const [text, setText] = useState('');
+
+  const onChange = (event) => {
+    console.log(event.target.value);
+    setText(event.target.value);
+  }
+
+  const onReset = () => {
+    setText('');
+  }
+
+  return (
+    <div>
+      <input onChange={onChange} value={text}/>
+      <button onClick={onReset}>초기화</button>
+      <div>
+        <b>값: {text}</b>
+      </div>
+    </div>
+  )
+}
+
+export default InputSample;
+```
+
+#### 여러개의 input 상태 관리하기
+
+```jsx
+import React, {useState} from "react";
+
+function InputSample2() {
+  const [inputs, setInputs] = useState({
+    name: '',
+    nickname: ''
+  })
+
+  const { name, nickname } = inputs;
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    const nextInputs = {
+      ...inputs,
+      [name]: value // 덮어 씌우기
+    };
+    setInputs(nextInputs);
+  }
+
+  const onReset = () => {
+    setInputs({ name: '', nickname: '' });
+  }
+
+  return (
+    <div>
+      <input name="name" placeholder="이름" onChange={onChange} value={name}/>
+      <input name="nickname" placeholder="닉네임" onChange={onChange} value={nickname}/>
+      <button onClick={onReset}>초기화</button>
+      <div>
+        <b>이름: {name}</b>
+        <b>닉네임: {nickname}</b>
+      </div>
+    </div>
+  )
+}
+
+export default InputSample2;
+```
+
+### useRef 로 특정 DOM 선택하기
+
+```jsx
+import React, {useRef} from "react";
+
+function ClockAndFocus() {
+  // 1. 먼저 생성한 다음
+  const nameInput = useRef();
+
+  const onClick = () => {
+    // 3. 해당 dom 조작을 한다.
+    nameInput.current.focus();
+  };
+
+  return (
+    <div>
+      <input name="name" ref={nameInput}/> // 2. 생성한 ref를 지정한다.
+      <button onClick={onClick}>Focus!</button>
+    </div>
+  )
+}
+
+export default ClockAndFocus;
 ```
