@@ -246,3 +246,54 @@ function ClockAndFocus() {
 
 export default ClockAndFocus;
 ```
+
+---
+
+### 배열 렌더링하기
+
+```jsx
+import React from "react";
+
+function User({ user }) {
+  const { id, username, email } =  user;
+  return (
+    <div>
+      {id} / {username} / {email}
+    </div>
+  )
+}
+
+function UserList() {
+  return (
+    <div>
+      {users.map(user => <User key={user.id} user={user}/>)}
+    </div>
+  )
+}
+
+export default UserList;
+
+const users = [
+  {
+    id: 1,
+    username: 'chris',
+    email: 'chris@gmail.com'
+  },
+  {
+    id: 2,
+    username: 'chris2',
+    email: 'chris2@gmail.com'
+  },
+  {
+    id: 3,
+    username: 'chris3',
+    email: 'chris3@gmail.com'
+  },
+];
+```
+
+만약 key가 index일 경우 렌더링 시 성능 최적화하기가 힘들다.
+
+key는 unique한 id로 하는 것이 좋다.
+
+![](2020-02-04-21-57-31.png)
