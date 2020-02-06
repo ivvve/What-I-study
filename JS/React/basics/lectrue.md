@@ -247,9 +247,48 @@ function ClockAndFocus() {
 export default ClockAndFocus;
 ```
 
----
+### 배열로 컴포넌트 다루기
 
-### 배열 렌더링하기
+#### 배열 렌더링하기
+
+```jsx
+import React, {useRef, useState} from 'react';
+import Hello from "./Hello";
+import Wrapper from "./Wrapper";
+import Counter from "./state/Counter";
+import InputSample2 from "./state/InputSample2";
+import ClockAndFocus from "./ref/ClickAndFocus";
+import UserList from "./ref/UserList";
+import CreateUser from "./ref/CreateUser";
+
+function App() {
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'chris',
+      email: 'chris@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'chris2',
+      email: 'chris2@gmail.com'
+    },
+    {
+      id: 3,
+      username: 'chris3',
+      email: 'chris3@gmail.com'
+    }
+  ]);
+
+  return (
+    <>
+      <UserList users={users}/> 
+    </>
+  );
+}
+
+export default App;
+```
 
 ```jsx
 import React from "react";
@@ -263,33 +302,15 @@ function User({ user }) {
   )
 }
 
-function UserList() {
+function UserList({ users }) {
   return (
     <div>
-      {users.map(user => <User key={user.id} user={user}/>)}
+      { users.map(user => <User key={user.id} user={user}/>) }
     </div>
   )
 }
 
 export default UserList;
-
-const users = [
-  {
-    id: 1,
-    username: 'chris',
-    email: 'chris@gmail.com'
-  },
-  {
-    id: 2,
-    username: 'chris2',
-    email: 'chris2@gmail.com'
-  },
-  {
-    id: 3,
-    username: 'chris3',
-    email: 'chris3@gmail.com'
-  },
-];
 ```
 
 만약 key가 index일 경우 렌더링 시 성능 최적화하기가 힘들다.
@@ -297,3 +318,215 @@ const users = [
 key는 unique한 id로 하는 것이 좋다.
 
 ![](2020-02-04-21-57-31.png)
+
+#### 배열 추가하기
+
+```jsx
+import React, {useRef, useState} from 'react';
+import Hello from "./Hello";
+import Wrapper from "./Wrapper";
+import Counter from "./state/Counter";
+import InputSample2 from "./state/InputSample2";
+import ClockAndFocus from "./ref/ClickAndFocus";
+import UserList from "./ref/UserList";
+import CreateUser from "./ref/CreateUser";
+
+function App() {
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'chris',
+      email: 'chris@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'chris2',
+      email: 'chris2@gmail.com'
+    },
+    {
+      id: 3,
+      username: 'chris3',
+      email: 'chris3@gmail.com'
+    }
+  ]);
+
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: ''
+  });
+
+  const { username, email } = inputs;
+
+  // 컴포넌트가 re-rendering 되도 이 값은 계속 갖고있다.
+  const nextId = useRef(4);
+
+  // add new user into users array
+  const onCreate = () => {
+    const user = { id: nextId.current, username, email }
+    setUsers(users.concat(user));
+
+    // reset input values
+    setInputs({
+      username: '',
+      email: ''
+    });
+
+    console.log(nextId.current); // 4
+    nextId.current += 1; // 값 증가
+  };
+
+  // Input value change
+  const onChange = e => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
+
+  return (
+    <>
+      <CreateUser 
+        username={username} 
+        email={email} 
+        onChange={onChange} 
+        onCreate={onCreate}/>
+      
+      <UserList users={users}/> 
+    </>
+  );
+}
+
+export default App;
+```
+
+```jsx
+import React from "react";
+
+function CreateUser({ username, email, onChange, onCreate }) {
+  return (
+    <div>
+      <input name="username" placeholder="계정명" onChange={onChange} value={username}/>
+      <input name="email" placeholder="이메일" onChange={onChange} value={email}/>
+      <button onClick={onCreate}>Register</button>
+    </div>
+  )
+}
+
+export default CreateUser;
+```
+
+#### 배열 삭제
+
+```jsx
+import React, {useRef, useState} from 'react';
+import Hello from "./Hello";
+import Wrapper from "./Wrapper";
+import Counter from "./state/Counter";
+import InputSample2 from "./state/InputSample2";
+import ClockAndFocus from "./ref/ClickAndFocus";
+import UserList from "./ref/UserList";
+import CreateUser from "./ref/CreateUser";
+
+function App() {
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'chris',
+      email: 'chris@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'chris2',
+      email: 'chris2@gmail.com'
+    },
+    {
+      id: 3,
+      username: 'chris3',
+      email: 'chris3@gmail.com'
+    }
+  ]);
+
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: ''
+  });
+
+  const { username, email } = inputs;
+
+  // 컴포넌트가 re-rendering 되도 이 값은 계속 갖고있다.
+  const nextId = useRef(4);
+
+  const onCreate = () => {
+    const user = { id: nextId.current, username, email }
+    setUsers(users.concat(user));
+
+    setInputs({
+      username: '',
+      email: ''
+    });
+
+    console.log(nextId.current); // 4
+    nextId.current += 1; // 값 증가
+  };
+
+  const onChange = e => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
+
+  // delete element from array and set users array
+  const onRemove = (id) => {
+    const filteredUser = users.filter(user => user.id !== id);
+    setUsers(filteredUser);
+  };
+
+  const onToggle = (id) => {
+  };
+
+  return (
+    <>
+      <CreateUser
+        username={username}
+        email={email}
+        onChange={onChange}
+        onCreate={onCreate}/>
+
+      <UserList
+        users={users}
+        onRemove={onRemove}/>
+    </>
+  );
+}
+
+export default App;
+```
+
+```jsx
+import React from "react";
+
+function User({ user, onRemove }) {
+  const { id, username, email } =  user;
+
+  return (
+    <div>
+      {id} / {username} / {email}
+      <button onClick={() => onRemove(id)}>delete</button>
+    </div>
+  )
+}
+
+function UserList({ users, onRemove }) {
+  return (
+    <div>
+      {users.map(user => <User key={user.id} user={user} onRemove={onRemove}/>)}
+    </div>
+  )
+}
+
+export default UserList;
+```
+
