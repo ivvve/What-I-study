@@ -50,7 +50,7 @@ npm run start:dev
   - Global pipe:
    app level에서 사용되며 모든 들어오는 요청에 적용된다.
     - ```ts
-      const app = await NestFactory.create(AppModule);
+      const app = await NestFactory.create(FcmPushModule);
       app.useGlobalPipes(SomePipe);
       ```
 
@@ -377,11 +377,11 @@ export class TasksController {
 
 ```ts
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { FcmPushModule } from './app.module';
 import {Logger} from "@nestjs/common";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { 
+  const app = await NestFactory.create(FcmPushModule, { 
     logger: ['log', 'warn', 'error', 'debug'] // log level 정의
   });
   await app.listen(3000);

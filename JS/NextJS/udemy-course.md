@@ -517,4 +517,14 @@ export default function Header() {
 }
 ```
 
+## Link href aslias
 
+`<Link>`의 `as` property를 통해 href로 이동하되 URL은 as에 있는 값으로 보여지게된다.
+
+```tsx
+<Link as={`/portfolios/${post.id}`} href={`/portfolio?title=${post.title}`}>
+  <a style={{'fontSize': '20px'}}>{post.title}</a>
+</Link>
+```
+
+## Server (express)

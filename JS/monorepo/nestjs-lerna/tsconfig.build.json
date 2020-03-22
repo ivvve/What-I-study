@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "incremental": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test"
+  ]
+}
