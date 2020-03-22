@@ -1,0 +1,48 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/nestjs-multi-module-monorepo/src",
+  "monorepo": true,
+  "root": "apps/nestjs-multi-module-monorepo",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/nestjs-multi-module-monorepo/tsconfig.app.json"
+  },
+  "projects": {
+    "api-server": {
+      "type": "application",
+      "root": "apps/api-server",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-server/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-server/tsconfig.app.json"
+      }
+    },
+    "domain-user": {
+      "type": "library",
+      "root": "libs/domain/user",
+      "entryFile": "index",
+      "sourceRoot": "libs/domain/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/domain/user/tsconfig.lib.json"
+      }
+    },
+    "domain-board": {
+      "type": "library",
+      "root": "libs/domain/board",
+      "entryFile": "index",
+      "sourceRoot": "libs/domain/board/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/domain/board/tsconfig.lib.json"
+      }
+    },
+    "common-util": {
+      "type": "library",
+      "root": "libs/common/util",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/util/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/util/tsconfig.lib.json"
+      }
+    }
+  }
+}
