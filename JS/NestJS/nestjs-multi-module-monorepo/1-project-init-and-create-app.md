@@ -4,6 +4,8 @@
 
 이번 포스팅에서는 Nest.js에서 제공하는 [Monorepo Mode](https://docs.nestjs.com/cli/monorepo) 기능을 통해 Multi Module + Monorepo project를 구축해보도록 하겠다.
 
+코드는 [여기](https://github.com/ivvve/What-I-study/tree/master/JS/NestJS/nestjs-multi-module-monorepo)에서 확인 가능하다
+
 ## 프로젝트 생성
 
 ```bash
