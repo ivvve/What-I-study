@@ -1,75 +1,94 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+Nest.js 기본 프로젝트를 Docker image로 만들어보고 해당 image를 container로 실행시키는 과정을 알아보자
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+코드 예제는 [여기](https://github.com/ivvve/What-I-study/tree/master/JS/NestJS/nestjs-docker)에 있다.
 
-## Description
+1. 프로젝트 생성
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+먼저 Nest.js CLI를 통해 프로젝트를 생성한다.
 
 ```bash
-$ npm install
+$ nest new nestjs-docker
 ```
 
-## Running the app
+![](./images/nest-docker-01.png)
+
+2. Docker image 생성을 위한 세팅
+
+다음 Docker image를 만들기 위해 프로젝트 디렉토리에 다음과 같이 `Dockerfile`을 생성한다.
+
+```docker
+# Step 1
+## base image for Step 1: Node 10
+FROM node:10 AS builder
+WORKDIR /app
+## 프로젝트의 모든 파일을 WORKDIR(/app)로 복사한다
+COPY . .
+## Nest.js project를 build 한다
+RUN npm install
+RUN npm run build
+
+
+# Step 2
+## base image for Step 2: Node 10-alpine(light weight)
+FROM node:10-alpine
+WORKDIR /app
+## Step 1의 builder에서 build된 프로젝트를 가져온다
+COPY --from=builder /app ./
+## application 실행
+CMD ["npm", "run", "start:prod"]
+```
+
+image build는 위와 같이 2 Step으로 이뤄지며,
+`Step 1`은 `ts->js`compile을 하기 위한 것이고,
+`Step 2`는 가벼운 node alpine image로 compile된 application을 실행하기 위함이다.
+
+여기서 `Step 1`에서 프로젝트의 파일을 옮길 때 옮길 필요없는 `dist`, `node_mouldes` 파일은 ignore하기 위해 `.dockerignore`파일을 생성한다.
+
+```
+node_modules
+dist
+```
+
+![](./images/nest-docker-02.png)
+
+3. Docker image build
+
+이제 build를 해보자
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ docker build -t devson/nestjs-docker-example .
 ```
 
-## Test
+정상적으로 build가 됐다면 local Docker에 생성한 Docker image가 있을 것이다.
 
 ```bash
-# unit tests
-$ npm run test
+$ docker images
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+REPOSITORY                     TAG                 IMAGE ID            CREATED             SIZE
+devson/nestjs-docker-example   latest              7be3ab375f98        13 minutes ago      252MB
 ```
 
-## Support
+4. Run Docker image
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+이제 Docker image가 제대로 build가 되었는지 실행해보자
 
-## Stay in touch
+```bash
+$ docker run devson/nestjs-docker-example
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+> nestjs-docker@0.0.1 start:prod /app
+> node dist/main
 
-## License
+[Nest] 17   - 03/23/2020, 1:51:19 PM   [NestFactory] Starting Nest application...
+[Nest] 17   - 03/23/2020, 1:51:19 PM   [InstanceLoader] AppModule dependencies initialized +32ms
+[Nest] 17   - 03/23/2020, 1:51:19 PM   [RoutesResolver] AppController {}: +10ms
+[Nest] 17   - 03/23/2020, 1:51:19 PM   [RouterExplorer] Mapped {, GET} route +7ms
+[Nest] 17   - 03/23/2020, 1:51:19 PM   [NestApplication] Nest application successfully started +4ms
+```
 
-  Nest is [MIT licensed](LICENSE).
+위와 같이 Application이 정상적으로 잘 실행되는 것을 확인할 수 있다.
+
+---
+
+참고:
+- https://dev.to/abbasogaji/how-to-dockerize-your-nestjs-app-for-production-2lmf
+- https://javacan.tistory.com/entry/docker-start-7-create-image-using-dockerfile
