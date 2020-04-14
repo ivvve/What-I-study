@@ -16,39 +16,48 @@ public class Args {
     private ErrorCode errorCode = ErrorCode.OK;
 
     private enum ErrorCode {
-        OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT}
+        OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT
+    }
 
     public Args(String schema, String[] args) throws ParseException {
         this.schema = schema;
         this.args = args;
-        valid = parse();
+        valid = parse(); // 생성과 동시에 parsing
     }
 
     private boolean parse() throws ParseException {
+        // schema와 args가 empty string이면 끝냄
         if (schema.length() == 0 && args.length == 0)
             return true;
+
+        // {ID}{type},{ID}{type},{ID}{type} 형태의 schema를 parsing
         parseSchema();
+
         try {
             parseArguments();
         } catch (ArgsException e) {
         }
+
         return valid;
     }
 
     private boolean parseSchema() throws ParseException {
+        // schema는 `,` base로 들어옴
         for (String element : schema.split(",")) {
             if (element.length() > 0) {
                 String trimmedElement = element.trim();
-                parseSchemaElement(trimmedElement);
+                parseSchemaElement(trimmedElement); // schema의 element를 하나씩 parsing
             }
         }
         return true;
     }
 
     private void parseSchemaElement(String element) throws ParseException {
+        // element format: {ID}{type}
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
+
         if (isBooleanSchemaElement(elementTail))
             parseBooleanSchemaElement(elementId);
         else if (isStringSchemaElement(elementTail))
@@ -109,10 +118,11 @@ public class Args {
     }
 
     private void parseElement(char argChar) throws ArgsException {
-        if (setArgument(argChar))
+        if (setArgument(argChar)) // 해당 argChar가 schema에 등록되어있다면 set하고 true return
             argsFound.add(argChar);
         else
             unexpectedArguments.add(argChar);
+
         errorCode = ErrorCode.UNEXPECTED_ARGUMENT;
         valid = false;
     }
