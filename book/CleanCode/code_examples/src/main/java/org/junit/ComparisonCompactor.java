@@ -8,8 +8,8 @@ public class ComparisonCompactor {
     private int contextLength;
     private String expected;
     private String actual;
-    private int prefixIndex;
-    private int suffixIndex;
+    private int prefixLength;
+    private int suffixLength;
     private String compactExpected;
     private String compactActual;
 
@@ -37,19 +37,24 @@ public class ComparisonCompactor {
     private void findCommonPrefixAndSuffix() {
         this.findCommonPrefix();
 
-        int expectedSuffix = this.expected.length() - 1;
-        int actualSuffix = this.actual.length() - 1;
+        int suffixLength = 1;
 
-        for (;
-             (this.prefixIndex <= actualSuffix) && (this.prefixIndex <= expectedSuffix);
-             actualSuffix--, expectedSuffix--) {
-
-            if (this.expected.charAt(expectedSuffix) != this.actual.charAt(actualSuffix)) {
+        for (; !this.suffixOverlapsPrefix(suffixLength); suffixLength++) {
+            if (this.charFromEnd(this.expected, suffixLength) != this.charFromEnd(this.actual, suffixLength)) {
                 break;
             }
         }
 
-        this.suffixIndex = this.expected.length() - expectedSuffix;
+        this.suffixLength = suffixLength;
+    }
+
+    private boolean suffixOverlapsPrefix(final int suffixLength) {
+        return (this.actual.length() - suffixLength < this.prefixLength) ||
+                (this.expected.length() - suffixLength < this.prefixLength);
+    }
+
+    private char charFromEnd(final String s, int i) {
+        return s.charAt(s.length() - i);
     }
 
     private boolean canBeCompacted() {
@@ -58,14 +63,14 @@ public class ComparisonCompactor {
 
     private String compactString(final String source) {
         String result = DELTA_START +
-                source.substring(this.prefixIndex, source.length() - this.suffixIndex + 1) +
+                source.substring(this.prefixLength, source.length() - this.suffixLength + 1) +
                 DELTA_END;
 
-        if (0 < this.prefixIndex) {
+        if (0 < this.prefixLength) {
             result = this.computeCommonPrefix() + result;
         }
 
-        if (0 < this.suffixIndex) {
+        if (0 < this.suffixLength) {
             result = result + this.computeCommonSuffix();
         }
 
@@ -73,27 +78,27 @@ public class ComparisonCompactor {
     }
 
     private void findCommonPrefix() {
-        this.prefixIndex = 0;
+        this.prefixLength = 0;
         final int end = Math.min(this.expected.length(), this.actual.length());
 
-        for (; this.prefixIndex < end; this.prefixIndex++) {
+        for (; this.prefixLength < end; this.prefixLength++) {
 
-            if (this.expected.charAt(this.prefixIndex) != this.actual.charAt(this.prefixIndex)) {
+            if (this.expected.charAt(this.prefixLength) != this.actual.charAt(this.prefixLength)) {
                 break;
             }
         }
     }
 
     private String computeCommonPrefix() {
-        return (this.contextLength < this.prefixIndex ? ELLIPSIS : "") +
-                this.expected.substring(Math.max(0, this.prefixIndex - this.contextLength), this.prefixIndex);
+        return (this.contextLength < this.prefixLength ? ELLIPSIS : "") +
+                this.expected.substring(Math.max(0, this.prefixLength - this.contextLength), this.prefixLength);
     }
 
     private String computeCommonSuffix() {
-        final int end = Math.min(this.expected.length() - this.suffixIndex + 1 + this.contextLength,
+        final int end = Math.min(this.expected.length() - this.suffixLength + 1 + this.contextLength,
                 this.expected.length());
-        return this.expected.substring(this.expected.length() - this.suffixIndex + 1, end) +
-                (this.expected.length() - this.suffixIndex + 1 < this.expected.length() -
+        return this.expected.substring(this.expected.length() - this.suffixLength + 1, end) +
+                (this.expected.length() - this.suffixLength + 1 < this.expected.length() -
                         this.contextLength ? ELLIPSIS : "");
     }
 
