@@ -35,16 +35,16 @@ public class ComparisonCompactor {
 
         this.suffixLength = 0;
 
-        for (; !this.suffixOverlapsPrefix(this.suffixLength); this.suffixLength++) {
+        for (; !this.suffixOverlapsPrefix(); this.suffixLength++) {
             if (this.charFromEnd(this.expected, this.suffixLength) != this.charFromEnd(this.actual, this.suffixLength)) {
                 break;
             }
         }
     }
 
-    private boolean suffixOverlapsPrefix(final int suffixLength) {
-        return (this.actual.length() - suffixLength <= this.prefixLength) ||
-                (this.expected.length() - suffixLength <= this.prefixLength);
+    private boolean suffixOverlapsPrefix() {
+        return (this.actual.length() - this.suffixLength <= this.prefixLength) ||
+                (this.expected.length() - this.suffixLength <= this.prefixLength);
     }
 
     private char charFromEnd(final String s, int i) {
