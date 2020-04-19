@@ -18,19 +18,19 @@ public class ComparisonCompactor {
     }
 
     public String compact(final String message) {
-        if (this.shouldNotCompact()) {
+        if (this.canBeCompacted()) {
+            this.findCommonPrefix();
+            this.findCommonSuffix();
+            final String compactExpected = this.compactString(this.expected);
+            final String compactActual = this.compactString(this.actual);
+            return Assert.format(message, compactExpected, compactActual);
+        } else {
             return Assert.format(message, this.expected, this.actual);
         }
-
-        this.findCommonPrefix();
-        this.findCommonSuffix();
-        final String compactExpected = this.compactString(this.expected);
-        final String compactActual = this.compactString(this.actual);
-        return Assert.format(message, compactExpected, compactActual);
     }
 
-    private boolean shouldNotCompact() {
-        return this.expected == null || this.actual == null || this.areStringEqual();
+    private boolean canBeCompacted() {
+        return this.expected != null && this.actual != null && !this.areStringEqual();
     }
 
     private String compactString(final String source) {
