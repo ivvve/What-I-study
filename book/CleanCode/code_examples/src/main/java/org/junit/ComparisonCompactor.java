@@ -24,9 +24,9 @@ public class ComparisonCompactor {
 
         this.findCommonPrefix();
         this.findCommonSuffix();
-        final String expected = this.compactString(this.expected);
-        final String actual = this.compactString(this.actual);
-        return Assert.format(message, expected, actual);
+        final String compactExpected = this.compactString(this.expected);
+        final String compactActual = this.compactString(this.actual);
+        return Assert.format(message, compactExpected, compactActual);
     }
 
     private boolean shouldNotCompact() {
