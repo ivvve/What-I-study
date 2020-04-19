@@ -58,11 +58,13 @@ public class ComparisonCompactor {
     }
 
     private String compact(final String source) {
-        return this.computeCommonPrefix() +
-                DELTA_START +
-                source.substring(this.prefixLength, source.length() - this.suffixLength) +
-                DELTA_END +
-                this.computeCommonSuffix();
+        return new StringBuilder()
+                .append(this.computeCommonPrefix())
+                .append(DELTA_START)
+                .append(source.substring(this.prefixLength, source.length() - this.suffixLength))
+                .append(DELTA_END)
+                .append(this.computeCommonSuffix())
+                .toString();
     }
 
     private void findCommonPrefix() {
