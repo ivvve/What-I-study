@@ -30,7 +30,7 @@ public class ComparisonCompactor {
 
     private void compactExpectedAndActual() {
         this.prefixIndex = this.findCommonPrefix();
-        this.suffixIndex = this.findCommonSuffix();
+        this.suffixIndex = this.findCommonSuffix(this.prefixIndex);
         this.compactExpected = this.compactString(this.expected);
         this.compactActual = this.compactString(this.actual);
     }
@@ -69,12 +69,12 @@ public class ComparisonCompactor {
         return prefixIndex;
     }
 
-    private int findCommonSuffix() {
+    private int findCommonSuffix(final int prefixIndex) {
         int expectedSuffix = this.expected.length() - 1;
         int actualSuffix = this.actual.length() - 1;
 
         for (;
-             (this.prefixIndex <= actualSuffix) && (this.prefixIndex <= expectedSuffix);
+             (prefixIndex <= actualSuffix) && (prefixIndex <= expectedSuffix);
              actualSuffix--, expectedSuffix--) {
 
             if (this.expected.charAt(expectedSuffix) != this.actual.charAt(actualSuffix)) {
