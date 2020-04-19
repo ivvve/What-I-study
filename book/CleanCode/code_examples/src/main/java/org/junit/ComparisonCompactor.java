@@ -10,6 +10,8 @@ public class ComparisonCompactor {
     private String actual;
     private int prefix;
     private int suffix;
+    private String compactExpected;
+    private String compactActual;
 
     public ComparisonCompactor(final int contextLength, final String expected, final String actual) {
         this.contextLength = contextLength;
@@ -17,16 +19,20 @@ public class ComparisonCompactor {
         this.actual = actual;
     }
 
-    public String compact(final String message) {
+    public String formatCompactedComparison(final String message) {
         if (this.canBeCompacted()) {
-            this.findCommonPrefix();
-            this.findCommonSuffix();
-            final String compactExpected = this.compactString(this.expected);
-            final String compactActual = this.compactString(this.actual);
+            compactExpectedAndActual();
             return Assert.format(message, compactExpected, compactActual);
         } else {
             return Assert.format(message, this.expected, this.actual);
         }
+    }
+
+    private void compactExpectedAndActual() {
+        this.findCommonPrefix();
+        this.findCommonSuffix();
+        this.compactExpected = this.compactString(this.expected);
+        this.compactActual = this.compactString(this.actual);
     }
 
     private boolean canBeCompacted() {
