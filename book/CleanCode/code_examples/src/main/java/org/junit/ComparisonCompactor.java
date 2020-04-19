@@ -23,8 +23,8 @@ public class ComparisonCompactor {
 
         if (this.canBeCompacted()) {
             this.findCommonPrefixAndSuffix();
-            compactExpected = this.compactString(this.expected);
-            compactActual = this.compactString(this.actual);
+            compactExpected = this.compact(this.expected);
+            compactActual = this.compact(this.actual);
         }
 
         return Assert.format(message, compactExpected, compactActual);
@@ -55,7 +55,7 @@ public class ComparisonCompactor {
         return this.expected != null && this.actual != null && !this.areStringEqual();
     }
 
-    private String compactString(final String source) {
+    private String compact(final String source) {
         return this.computeCommonPrefix() +
                 DELTA_START +
                 source.substring(this.prefixLength, source.length() - this.suffixLength) +
