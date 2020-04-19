@@ -59,11 +59,13 @@ public class ComparisonCompactor {
 
     private String compact(final String source) {
         return new StringBuilder()
-                .append(this.computeCommonPrefix())
+                .append(this.startingEllipsis())
+                .append(this.startingContext())
                 .append(DELTA_START)
-                .append(source.substring(this.prefixLength, source.length() - this.suffixLength))
+                .append(this.delta(source))
                 .append(DELTA_END)
-                .append(this.computeCommonSuffix())
+                .append(this.endingContext())
+                .append(this.endingEllipsis())
                 .toString();
     }
 
@@ -79,16 +81,29 @@ public class ComparisonCompactor {
         }
     }
 
-    private String computeCommonPrefix() {
-        return (this.contextLength < this.prefixLength ? ELLIPSIS : "") +
-                this.expected.substring(Math.max(0, this.prefixLength - this.contextLength), this.prefixLength);
+    private String startingEllipsis() {
+        return (this.contextLength < this.prefixLength) ? ELLIPSIS : "";
     }
 
-    private String computeCommonSuffix() {
-        final int end = Math.min(this.expected.length() - this.suffixLength + this.contextLength,
-                this.expected.length());
-        return this.expected.substring(this.expected.length() - this.suffixLength, end) +
-                (this.expected.length() - this.suffixLength < this.expected.length() -
-                        this.contextLength ? ELLIPSIS : "");
+    private String startingContext() {
+        final int contextStart = Math.max(0, this.prefixLength - this.contextLength);
+        final int contextEnd = this.prefixLength;
+        return this.expected.substring(contextStart, contextEnd);
+    }
+
+    private String delta(final String source) {
+        final int deltaStart = this.prefixLength;
+        final int deltaEnd = source.length() - this.suffixLength;
+        return source.substring(deltaStart, deltaEnd);
+    }
+
+    private String endingContext() {
+        final int contextStart = this.expected.length() - this.suffixLength;
+        final int contextEnd = Math.min(contextStart + this.contextLength, this.expected.length());
+        return this.expected.substring(contextStart, contextEnd);
+    }
+
+    private String endingEllipsis() {
+        return (this.contextLength < this.suffixLength) ? ELLIPSIS : "";
     }
 }
