@@ -744,17 +744,15 @@ public abstract class SerialDate implements Comparable,
             );
         }
 
-        // find the date...
-        final int baseDOW = base.getDayOfWeek();
-        int adjust = -Math.abs(targetDOW - baseDOW);
-        if (adjust >= 4) {
-            adjust = 7 - adjust;
-        }
-        if (adjust <= -4) {
-            adjust = 7 + adjust;
-        }
-        return SerialDate.addDays(adjust, base);
+        int delta = targetDOW - base.getDayOfWeek();
+        int positiveDelta = delta + 7;
+        int adjust = positiveDelta % 7;
 
+        if (adjust > 3) {
+            adjust -= 7;
+        }
+
+        return SerialDate.addDays(adjust, base);
     }
 
     /**
