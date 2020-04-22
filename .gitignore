@@ -4,6 +4,9 @@
 # node.js dependencies
 node_modules
 
+# maven dependencies
+.mvn
+
 # Next
 .next
 
