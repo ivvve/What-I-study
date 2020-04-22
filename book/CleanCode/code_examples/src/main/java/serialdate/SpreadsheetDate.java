@@ -79,6 +79,13 @@ import java.util.Date;
  * @author David Gilbert
  */
 public class SpreadsheetDate extends DayDate {
+    static final int[] AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH =
+            {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+
+    static final int[]
+            LEAP_YEAR_AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH =
+            {0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366};
+
     /**
      * The lowest year value supported by this date format.
      */
@@ -441,7 +448,7 @@ public class SpreadsheetDate extends DayDate {
      */
     private int calcSerial(final int d, final int m, final int y) {
         final int yy = ((y - 1900) * 365) + DayDate.leapYearCount(y - 1);
-        int mm = DayDate.AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m];
+        int mm = AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m];
         if (m > Month.FEBRUARY.getIndex()) {
             if (DayDate.isLeapYear(y)) {
                 mm = mm + 1;
