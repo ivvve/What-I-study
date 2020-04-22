@@ -1,11 +1,11 @@
 package serialdate;
 
 import junit.framework.TestCase;
-import static serialdate.SerialDate.*;
+import static serialdate.DayDate.*;
 import static serialdate.MonthConstants.*;
 import java.util.*;
 
-public class BobsSerialDateTest extends TestCase {
+public class BobsDayDateTest extends TestCase {
 
     public void testIsValidWeekdayCode() throws Exception {
         for (int day = 1; day <= 7; day++)
@@ -270,7 +270,7 @@ public class BobsSerialDateTest extends TestCase {
     }
 
     public void testAddDays() throws Exception {
-        SerialDate newYears = d(1, JANUARY, 1900);
+        DayDate newYears = d(1, JANUARY, 1900);
         assertEquals(d(2, JANUARY, 1900), addDays(1, newYears));
         assertEquals(d(1, FEBRUARY, 1900), addDays(31, newYears));
         assertEquals(d(1, JANUARY, 1901), addDays(365, newYears));
@@ -395,7 +395,7 @@ public class BobsSerialDateTest extends TestCase {
     }
 
     public void testEndOfCurrentMonth() throws Exception {
-        SerialDate d = SerialDate.createInstance(2);
+        DayDate d = DayDate.createInstance(2);
         assertEquals(d(31, JANUARY, 2006), d.getEndOfCurrentMonth(d(1, JANUARY, 2006)));
         assertEquals(d(28, FEBRUARY, 2006), d.getEndOfCurrentMonth(d(1, FEBRUARY, 2006)));
         assertEquals(d(31, MARCH, 2006), d.getEndOfCurrentMonth(d(1, MARCH, 2006)));
@@ -438,7 +438,7 @@ public class BobsSerialDateTest extends TestCase {
     }
 
     public void testCreateInstanceFromDDMMYYY() throws Exception {
-        SerialDate date = createInstance(1, JANUARY, 1900);
+        DayDate date = createInstance(1, JANUARY, 1900);
         assertEquals(1, date.getDayOfMonth());
         assertEquals(JANUARY, date.getMonth());
         assertEquals(1900, date.getYYYY());
