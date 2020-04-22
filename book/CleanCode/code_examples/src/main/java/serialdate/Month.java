@@ -34,4 +34,20 @@ public enum Month {
     public int getIndex() {
         return index;
     }
+
+    // TODO 기존 DayDate의 기능을 대체하기 위해 추가함
+    public static int monthCodeToQuarter(final int code) {
+        if ((JANUARY.index <= code) && (code <= MARCH.index)) {
+            return 1;
+        } else if ((APRIL.index <= code) && (code <= JUNE.index)) {
+            return 2;
+        } else if ((JULY.index <= code) && (code <= SEPTEMBER.index)) {
+            return 3;
+        } else if ((OCTOBER.index <= code) && (code <= DECEMBER.index)) {
+            return 4;
+        }
+
+        throw new IllegalArgumentException(
+                "SerialDate.monthCodeToQuarter: invalid month code.");
+    }
 }

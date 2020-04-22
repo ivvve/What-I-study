@@ -87,7 +87,7 @@ public class DayDateTest extends TestCase {
      * Problem set up.
      */
     protected void setUp() {
-        this.nov9Y2001 = DayDate.createInstance(9, MonthConstants.NOVEMBER, 2001);
+        this.nov9Y2001 = DayDate.createInstance(9, Month.NOVEMBER, 2001);
     }
 
     /**
@@ -95,7 +95,7 @@ public class DayDateTest extends TestCase {
      */
     public void testAddMonthsTo9Nov2001() {
         final DayDate jan9Y2002 = DayDate.addMonths(2, this.nov9Y2001);
-        final DayDate answer = DayDate.createInstance(9, 1, 2002);
+        final DayDate answer = DayDate.createInstance(9, Month.JANUARY, 2002);
         assertEquals(answer, jan9Y2002);
     }
 
@@ -103,16 +103,16 @@ public class DayDateTest extends TestCase {
      * A test case for a reported bug, now fixed.
      */
     public void testAddMonthsTo5Oct2003() {
-        final DayDate d1 = DayDate.createInstance(5, MonthConstants.OCTOBER, 2003);
+        final DayDate d1 = DayDate.createInstance(5, Month.OCTOBER, 2003);
         final DayDate d2 = DayDate.addMonths(2, d1);
-        assertEquals(d2, DayDate.createInstance(5, MonthConstants.DECEMBER, 2003));
+        assertEquals(d2, DayDate.createInstance(5, Month.DECEMBER, 2003));
     }
 
     /**
      * A test case for a reported bug, now fixed.
      */
     public void testAddMonthsTo1Jan2003() {
-        final DayDate d1 = DayDate.createInstance(1, MonthConstants.JANUARY, 2003);
+        final DayDate d1 = DayDate.createInstance(1, Month.JANUARY, 2003);
         final DayDate d2 = DayDate.addMonths(0, d1);
         assertEquals(d2, d1);
     }
@@ -151,7 +151,7 @@ public class DayDateTest extends TestCase {
      * The Monday nearest to 22nd January 1970 falls on the 19th.
      */
     public void testMondayNearest22Jan1970() {
-        DayDate jan22Y1970 = DayDate.createInstance(22, MonthConstants.JANUARY, 1970);
+        DayDate jan22Y1970 = DayDate.createInstance(22, Month.JANUARY, 1970);
         DayDate mondayNearest= DayDate.getNearestDayOfWeek(Day.MONDAY.getIndex(), jan22Y1970);
         assertEquals(19, mondayNearest.getDayOfMonth());
     }
@@ -191,13 +191,13 @@ public class DayDateTest extends TestCase {
     public void testStringToMonthCode() {
 
         int m = DayDate.stringToMonthCode("January");
-        assertEquals(MonthConstants.JANUARY, m);
+        assertEquals(Month.JANUARY.getIndex(), m);
 
         m = DayDate.stringToMonthCode(" January ");
-        assertEquals(MonthConstants.JANUARY, m);
+        assertEquals(Month.JANUARY.getIndex(), m);
 
         m = DayDate.stringToMonthCode("Jan");
-        assertEquals(MonthConstants.JANUARY, m);
+        assertEquals(Month.JANUARY.getIndex(), m);
 
     }
 
@@ -206,7 +206,7 @@ public class DayDateTest extends TestCase {
      */
     public void testMonthCodeToStringCode() {
 
-        final String test = DayDate.monthCodeToString(MonthConstants.DECEMBER);
+        final String test = DayDate.monthCodeToString(Month.DECEMBER);
         assertEquals("December", test);
 
     }
@@ -265,7 +265,7 @@ public class DayDateTest extends TestCase {
      */
     public void testSerialization() {
 
-        DayDate d1 = DayDate.createInstance(15, 4, 2000);
+        DayDate d1 = DayDate.createInstance(15, Month.APRIL, 2000);
         DayDate d2 = null;
 
         try {
@@ -289,9 +289,9 @@ public class DayDateTest extends TestCase {
      * A test for bug report 1096282 (now fixed).
      */
     public void test1096282() {
-        DayDate d = DayDate.createInstance(29, 2, 2004);
+        DayDate d = DayDate.createInstance(29, Month.FEBRUARY, 2004);
         d = DayDate.addYears(1, d);
-        DayDate expected = DayDate.createInstance(28, 2, 2005);
+        DayDate expected = DayDate.createInstance(28, Month.FEBRUARY, 2005);
         assertTrue(d.isOn(expected));
     }
 
@@ -299,21 +299,21 @@ public class DayDateTest extends TestCase {
      * Miscellaneous tests for the addMonths() method.
      */
     public void testAddMonths() {
-        DayDate d1 = DayDate.createInstance(31, 5, 2004);
+        DayDate d1 = DayDate.createInstance(31, Month.MAY, 2004);
 
         DayDate d2 = DayDate.addMonths(1, d1);
         assertEquals(30, d2.getDayOfMonth());
-        assertEquals(6, d2.getMonth());
+        assertEquals(6, d2.getMonth().getIndex());
         assertEquals(2004, d2.getYYYY());
 
         DayDate d3 = DayDate.addMonths(2, d1);
         assertEquals(31, d3.getDayOfMonth());
-        assertEquals(7, d3.getMonth());
+        assertEquals(7, d3.getMonth().getIndex());
         assertEquals(2004, d3.getYYYY());
 
         DayDate d4 = DayDate.addMonths(1, DayDate.addMonths(1, d1));
         assertEquals(30, d4.getDayOfMonth());
-        assertEquals(7, d4.getMonth());
+        assertEquals(7, d4.getMonth().getIndex());
         assertEquals(2004, d4.getYYYY());
     }
 }

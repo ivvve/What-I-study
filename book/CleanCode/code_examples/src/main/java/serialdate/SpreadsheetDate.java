@@ -99,7 +99,7 @@ public class SpreadsheetDate extends DayDate {
     private int day;
 
     /** The month of the year (1 to 12). */
-    private int month;
+    private Month month;
 
     /** The year (1900 to 9999). */
     private int year;
@@ -125,9 +125,9 @@ public class SpreadsheetDate extends DayDate {
             );
         }
 
-        if ((month >= MonthConstants.JANUARY)
-                && (month <= MonthConstants.DECEMBER)) {
-            this.month = month;
+        if ((month >= Month.JANUARY.getIndex())
+                && (month <= Month.DECEMBER.getIndex())) {
+            this.month = Month.make(month);
         }
         else {
             throw new IllegalArgumentException(
@@ -135,7 +135,7 @@ public class SpreadsheetDate extends DayDate {
             );
         }
 
-        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(month, year))) {
+        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(Month.make(month), year))) {
             this.day = day;
         }
         else {
@@ -146,7 +146,6 @@ public class SpreadsheetDate extends DayDate {
         this.serial = calcSerial(day, month, year);
 
         this.description = null;
-
     }
 
     public SpreadsheetDate(final int day, final Month month, final int year) {
@@ -213,7 +212,7 @@ public class SpreadsheetDate extends DayDate {
      */
     public Date toDate() {
         final Calendar calendar = Calendar.getInstance();
-        calendar.set(getYYYY(), getMonth() - 1, getDayOfMonth(), 0, 0, 0);
+        calendar.set(getYYYY(), getMonth().getIndex() - 1, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
     }
 
@@ -231,7 +230,7 @@ public class SpreadsheetDate extends DayDate {
      *
      * @return The month of the year.
      */
-    public int getMonth() {
+    public Month getMonth() {
         return this.month;
     }
 
@@ -443,7 +442,7 @@ public class SpreadsheetDate extends DayDate {
     private int calcSerial(final int d, final int m, final int y) {
         final int yy = ((y - 1900) * 365) + DayDate.leapYearCount(y - 1);
         int mm = DayDate.AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m];
-        if (m > MonthConstants.FEBRUARY) {
+        if (m > Month.FEBRUARY.getIndex()) {
             if (DayDate.isLeapYear(y)) {
                 mm = mm + 1;
             }
@@ -495,11 +494,11 @@ public class SpreadsheetDate extends DayDate {
             mm = mm + 1;
             sss = ss2 + daysToEndOfPrecedingMonth[mm] - 1;
         }
-        this.month = mm - 1;
+        this.month = Month.make(mm - 1);
 
         // what's left is d(+1);
         this.day = this.serial - ss2
-                - daysToEndOfPrecedingMonth[this.month] + 1;
+                - daysToEndOfPrecedingMonth[this.month.getIndex()] + 1;
 
     }
 
