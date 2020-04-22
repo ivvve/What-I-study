@@ -82,16 +82,6 @@ public abstract class DayDate implements Comparable, Serializable {
     public static final int SERIAL_UPPER_BOUND = 2958465;
 
     /**
-     * The lowest year value supported by this date format.
-     */
-    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
-
-    /**
-     * The highest year value supported by this date format.
-     */
-    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
-
-    /**
      * Useful constant for Monday. Equivalent to java.util.Calendar.MONDAY.
      */
     public static final int MONDAY = Calendar.MONDAY;
