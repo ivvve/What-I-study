@@ -149,8 +149,9 @@ public class BobsSerialDateTest extends TestCase {
         assertEquals(NOVEMBER, stringToMonthCode("11"));
         assertEquals(DECEMBER, stringToMonthCode("12"));
 
-        //todo    assertEquals(-1, stringToMonthCode("0"));
-        //     assertEquals(-1, stringToMonthCode("13"));
+        // 올바른 month의 numeric string value가 아닐 경우
+        assertEquals(-1, stringToMonthCode("0"));
+        assertEquals(-1, stringToMonthCode("13"));
 
         assertEquals(-1, stringToMonthCode("Hello"));
 
