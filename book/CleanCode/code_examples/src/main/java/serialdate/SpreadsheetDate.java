@@ -149,6 +149,10 @@ public class SpreadsheetDate extends DayDate {
 
     }
 
+    public SpreadsheetDate(final int day, final Month month, final int year) {
+        this(day, month.getIndex(), year);
+    }
+
     /**
      * Standard constructor - creates a new date object representing the
      * specified day number (which should be in the range 2 to 2958465.

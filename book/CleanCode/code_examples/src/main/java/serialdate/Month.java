@@ -30,4 +30,8 @@ public enum Month {
 
         throw new IllegalArgumentException("Invalid month index " + monthIndex);
     }
+
+    public int getIndex() {
+        return index;
+    }
 }
