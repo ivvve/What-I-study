@@ -63,13 +63,7 @@ import static serialdate.MonthConstants.*;
  * </pre>
  * @author David Gilbert
  */
-public abstract class DayDate implements Comparable,
-        Serializable {
-
-    /**
-     * For serialization.
-     */
-    private static final long serialVersionUID = -293716040467423637L;
+public abstract class DayDate implements Comparable, Serializable {
 
     /**
      * Date format symbols.
