@@ -83,30 +83,9 @@ public abstract class DayDate implements Comparable, Serializable {
             {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     /**
-     * Useful range constant.
-     */
-    public static final int INCLUDE_NONE = 0;
-
-    /**
-     * Useful range constant.
-     */
-    public static final int INCLUDE_FIRST = 1;
-
-    /**
-     * Useful range constant.
-     */
-    public static final int INCLUDE_SECOND = 2;
-
-    /**
-     * Useful range constant.
-     */
-    public static final int INCLUDE_BOTH = 3;
-
-    /**
      * A description for the date.
      */
     private String description;
-
 
     /**
      * Default constructor.
@@ -721,12 +700,11 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @param d1      a boundary date for the range.
      * @param d2      the other boundary date for the range.
-     * @param include a code that controls whether or not the start and end
+     * @param interval a code that controls whether or not the start and end
      *                dates are included in the range.
      * @return A boolean.
      */
-    public abstract boolean isInRange(DayDate d1, DayDate d2,
-                                      int include);
+    public abstract boolean isInRange(DayDate d1, DayDate d2, DateInterval interval);
 
     /**
      * Returns the latest date that falls on the specified day-of-the-week and
