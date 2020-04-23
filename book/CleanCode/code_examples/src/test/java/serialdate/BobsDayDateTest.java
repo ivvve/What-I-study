@@ -396,18 +396,6 @@ public class BobsDayDateTest extends TestCase {
         assertEquals(d(29, Month.FEBRUARY.getIndex(), 2008), d.getEndOfCurrentMonth(d(1, Month.FEBRUARY.getIndex(), 2008)));
     }
 
-    public void testRelativeToString() throws Exception {
-        assertEquals("Preceding", relativeToString(PRECEDING));
-        assertEquals("Nearest", relativeToString(NEAREST));
-        assertEquals("Following", relativeToString(FOLLOWING));
-
-        try {
-          relativeToString(-1000);
-          fail("Invalid relative code should throw exception");
-        } catch (IllegalArgumentException e) {
-        }
-    }
-
     public void testCreateInstanceFromDDMMYYY() throws Exception {
         DayDate date = createInstance(1, Month.JANUARY, 1900);
         assertEquals(1, date.getDayOfMonth());
