@@ -50,7 +50,7 @@ package serialdate.old;
  *
  * @author David Gilbert
  */
-public interface MonthConstants {
+public interface MonthConstants { // ->Month
 
     /** Constant for January. */
     public static final int JANUARY = 1;

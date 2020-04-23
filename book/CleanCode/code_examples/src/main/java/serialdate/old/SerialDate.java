@@ -53,48 +53,48 @@ public abstract class SerialDate implements Comparable,
     /**
      * The lowest year value supported by this date format.
      */
-    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
+    public static final int MINIMUM_YEAR_SUPPORTED = 1900; // ->SpreadsheetDate
 
     /**
      * The highest year value supported by this date format.
      */
-    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
+    public static final int MAXIMUM_YEAR_SUPPORTED = 9999; // ->SpreadsheetDate
 
     /**
      * Useful constant for Monday. Equivalent to java.util.Calendar.MONDAY.
      */
-    public static final int MONDAY = Calendar.MONDAY;
+    public static final int MONDAY = Calendar.MONDAY; // ->Day
 
     /**
      * Useful constant for Tuesday. Equivalent to java.util.Calendar.TUESDAY.
      */
-    public static final int TUESDAY = Calendar.TUESDAY;
+    public static final int TUESDAY = Calendar.TUESDAY; // ->Day
 
     /**
      * Useful constant for Wednesday. Equivalent to
      * java.util.Calendar.WEDNESDAY.
      */
-    public static final int WEDNESDAY = Calendar.WEDNESDAY;
+    public static final int WEDNESDAY = Calendar.WEDNESDAY; // ->Day
 
     /**
      * Useful constant for Thrusday. Equivalent to java.util.Calendar.THURSDAY.
      */
-    public static final int THURSDAY = Calendar.THURSDAY;
+    public static final int THURSDAY = Calendar.THURSDAY; // ->Day
 
     /**
      * Useful constant for Friday. Equivalent to java.util.Calendar.FRIDAY.
      */
-    public static final int FRIDAY = Calendar.FRIDAY;
+    public static final int FRIDAY = Calendar.FRIDAY; // ->Day
 
     /**
      * Useful constant for Saturday. Equivalent to java.util.Calendar.SATURDAY.
      */
-    public static final int SATURDAY = Calendar.SATURDAY;
+    public static final int SATURDAY = Calendar.SATURDAY; // ->Day
 
     /**
      * Useful constant for Sunday. Equivalent to java.util.Calendar.SUNDAY.
      */
-    public static final int SUNDAY = Calendar.SUNDAY;
+    public static final int SUNDAY = Calendar.SUNDAY; // ->Day
 
     /**
      * The number of days in each month in non leap years.
@@ -130,65 +130,65 @@ public abstract class SerialDate implements Comparable,
     /**
      * A useful constant for referring to the first week in a month.
      */
-    public static final int FIRST_WEEK_IN_MONTH = 1;
+    public static final int FIRST_WEEK_IN_MONTH = 1; // ->WeekInMonth
 
     /**
      * A useful constant for referring to the second week in a month.
      */
-    public static final int SECOND_WEEK_IN_MONTH = 2;
+    public static final int SECOND_WEEK_IN_MONTH = 2; // ->WeekInMonth
 
     /**
      * A useful constant for referring to the third week in a month.
      */
-    public static final int THIRD_WEEK_IN_MONTH = 3;
+    public static final int THIRD_WEEK_IN_MONTH = 3; // ->WeekInMonth
 
     /**
      * A useful constant for referring to the fourth week in a month.
      */
-    public static final int FOURTH_WEEK_IN_MONTH = 4;
+    public static final int FOURTH_WEEK_IN_MONTH = 4; // ->WeekInMonth
 
     /**
      * A useful constant for referring to the last week in a month.
      */
-    public static final int LAST_WEEK_IN_MONTH = 0;
+    public static final int LAST_WEEK_IN_MONTH = 0; // ->WeekInMonth
 
     /**
      * Useful range constant.
      */
-    public static final int INCLUDE_NONE = 0;
+    public static final int INCLUDE_NONE = 0; // ->DateInterval
 
     /**
      * Useful range constant.
      */
-    public static final int INCLUDE_FIRST = 1;
+    public static final int INCLUDE_FIRST = 1; // ->DateInterval
 
     /**
      * Useful range constant.
      */
-    public static final int INCLUDE_SECOND = 2;
+    public static final int INCLUDE_SECOND = 2; // ->DateInterval
 
     /**
      * Useful range constant.
      */
-    public static final int INCLUDE_BOTH = 3;
+    public static final int INCLUDE_BOTH = 3; // ->DateInterval
 
     /**
      * Useful constant for specifying a day of the week relative to a fixed
      * date.
      */
-    public static final int PRECEDING = -1;
+    public static final int PRECEDING = -1; // ->WeekdayRange
 
     /**
      * Useful constant for specifying a day of the week relative to a fixed
      * date.
      */
-    public static final int NEAREST = 0;
+    public static final int NEAREST = 0; // ->WeekdayRange
 
     /**
      * Useful constant for specifying a day of the week relative to a fixed
      * date.
      */
-    public static final int FOLLOWING = 1;
+    public static final int FOLLOWING = 1; // ->WeekdayRange
 
     /**
      * A description for the date.
