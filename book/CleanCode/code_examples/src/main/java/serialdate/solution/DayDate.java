@@ -1,4 +1,4 @@
-package serialdate;
+package serialdate.solution;
 
 /* ========================================================================
  * JCommon : a free general purpose class library for the Java(tm) platform

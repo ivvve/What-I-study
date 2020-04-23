@@ -1,4 +1,4 @@
-package serialdate;
+package serialdate.solution;
 
 public abstract class DayDateFactory {
     private static DayDateFactory factory = new SpreadsheetDateFactory();

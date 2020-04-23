@@ -1,4 +1,4 @@
-package serialdate;
+package serialdate.solution;
 
 public enum DateInterval {
     OPEN {

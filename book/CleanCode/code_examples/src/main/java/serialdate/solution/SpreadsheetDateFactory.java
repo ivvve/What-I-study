@@ -1,4 +1,4 @@
-package serialdate;
+package serialdate.solution;
 
 import java.util.Calendar;
 import java.util.Date;

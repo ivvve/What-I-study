@@ -1,4 +1,4 @@
-package serialdate;
+package serialdate.solution;
 
 import java.text.DateFormatSymbols;
 
