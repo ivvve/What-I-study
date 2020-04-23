@@ -83,17 +83,6 @@ public abstract class DayDate implements Comparable, Serializable {
             {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     /**
-     * A description for the date.
-     */
-    private String description;
-
-    /**
-     * Default constructor.
-     */
-    protected DayDate() {
-    }
-
-    /**
      * Returns <code>true</code> if the supplied integer code represents a
      * valid day-of-the-week, and <code>false</code> otherwise.
      *
@@ -563,24 +552,6 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return this as <code>java.util.Date</code>.
      */
     public abstract java.util.Date toDate();
-
-    /**
-     * Returns a description of the date.
-     *
-     * @return a description of the date.
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * Sets the description for the date.
-     *
-     * @param description the new description for the date.
-     */
-    public void setDescription(final String description) {
-        this.description = description;
-    }
 
     /**
      * Converts the date to a string.
