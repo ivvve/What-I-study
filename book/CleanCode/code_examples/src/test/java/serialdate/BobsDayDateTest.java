@@ -205,13 +205,6 @@ public class BobsDayDateTest extends TestCase {
         assertEquals(12,stringToMonthCode("DECEMBER"));
     }
 
-    public void testIsValidWeekInMonthCode() throws Exception {
-        for (int w = 0; w <= 4; w++) {
-            assertTrue(isValidWeekInMonthCode(w));
-        }
-        assertFalse(isValidWeekInMonthCode(5));
-    }
-
     public void testIsLeapYear() throws Exception {
         assertFalse(isLeapYear(1900));
         assertFalse(isLeapYear(1901));
@@ -401,20 +394,6 @@ public class BobsDayDateTest extends TestCase {
         assertEquals(d(30, Month.NOVEMBER.getIndex(), 2006), d.getEndOfCurrentMonth(d(1, Month.NOVEMBER.getIndex(), 2006)));
         assertEquals(d(31, Month.DECEMBER.getIndex(), 2006), d.getEndOfCurrentMonth(d(1, Month.DECEMBER.getIndex(), 2006)));
         assertEquals(d(29, Month.FEBRUARY.getIndex(), 2008), d.getEndOfCurrentMonth(d(1, Month.FEBRUARY.getIndex(), 2008)));
-    }
-
-    public void testWeekInMonthToString() throws Exception {
-        assertEquals("First", weekInMonthToString(FIRST_WEEK_IN_MONTH));
-        assertEquals("Second", weekInMonthToString(SECOND_WEEK_IN_MONTH));
-        assertEquals("Third", weekInMonthToString(THIRD_WEEK_IN_MONTH));
-        assertEquals("Fourth", weekInMonthToString(FOURTH_WEEK_IN_MONTH));
-        assertEquals("Last", weekInMonthToString(LAST_WEEK_IN_MONTH));
-
-        try {
-          weekInMonthToString(-1);
-          fail("Invalid week code should throw exception");
-        } catch (IllegalArgumentException e) {
-        }
     }
 
     public void testRelativeToString() throws Exception {

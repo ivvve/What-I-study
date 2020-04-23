@@ -83,31 +83,6 @@ public abstract class DayDate implements Comparable, Serializable {
             {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     /**
-     * A useful constant for referring to the first week in a month.
-     */
-    public static final int FIRST_WEEK_IN_MONTH = 1;
-
-    /**
-     * A useful constant for referring to the second week in a month.
-     */
-    public static final int SECOND_WEEK_IN_MONTH = 2;
-
-    /**
-     * A useful constant for referring to the third week in a month.
-     */
-    public static final int THIRD_WEEK_IN_MONTH = 3;
-
-    /**
-     * A useful constant for referring to the fourth week in a month.
-     */
-    public static final int FOURTH_WEEK_IN_MONTH = 4;
-
-    /**
-     * A useful constant for referring to the last week in a month.
-     */
-    public static final int LAST_WEEK_IN_MONTH = 0;
-
-    /**
      * Useful range constant.
      */
     public static final int INCLUDE_NONE = 0;
@@ -343,29 +318,6 @@ public abstract class DayDate implements Comparable, Serializable {
     }
 
     /**
-     * Returns true if the supplied integer code represents a valid
-     * week-in-the-month, and false otherwise.
-     *
-     * @param code the code being checked for validity.
-     * @return <code>true</code> if the supplied integer code represents a
-     *         valid week-in-the-month.
-     */
-    public static boolean isValidWeekInMonthCode(final int code) {
-
-        switch (code) {
-            case FIRST_WEEK_IN_MONTH:
-            case SECOND_WEEK_IN_MONTH:
-            case THIRD_WEEK_IN_MONTH:
-            case FOURTH_WEEK_IN_MONTH:
-            case LAST_WEEK_IN_MONTH:
-                return true;
-            default:
-                return false;
-        }
-
-    }
-
-    /**
      * Determines whether or not the specified year is a leap year.
      *
      * @param yyyy the year (in the range 1900 to 9999).
@@ -591,33 +543,6 @@ public abstract class DayDate implements Comparable, Serializable {
                 base.getMonth(), base.getYYYY()
         );
         return DayDate.createInstance(last, base.getMonth(), base.getYYYY());
-    }
-
-    /**
-     * Returns a string corresponding to the week-in-the-month code.
-     * <p/>
-     * Need to find a better approach.
-     *
-     * @param count an integer code representing the week-in-the-month.
-     * @return a string corresponding to the week-in-the-month code.
-     */
-    public static String weekInMonthToString(final int count) {
-
-        switch (count) {
-            case DayDate.FIRST_WEEK_IN_MONTH:
-                return "First";
-            case DayDate.SECOND_WEEK_IN_MONTH:
-                return "Second";
-            case DayDate.THIRD_WEEK_IN_MONTH:
-                return "Third";
-            case DayDate.FOURTH_WEEK_IN_MONTH:
-                return "Fourth";
-            case DayDate.LAST_WEEK_IN_MONTH:
-                return "Last";
-            default:
-                throw new IllegalArgumentException("SerialDate.weekInMonthToString(): invalid code.");
-        }
-
     }
 
     /**
