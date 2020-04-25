@@ -1,0 +1,192 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ComparisonCompactor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.junit</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ComparisonCompactor (org.junit)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ComparisonCompactor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/ 49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.junit;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;public class ComparisonCompactor {
+<i>4</i>&nbsp;    private static final String ELLIPSIS = &quot;...&quot;;
+<i>5</i>&nbsp;    private static final String DELTA_START = &quot;[&quot;;
+<i>6</i>&nbsp;    private static final String DELTA_END = &quot;]&quot;;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    private int contextLength;
+<i>9</i>&nbsp;    private String expected;
+<i>10</i>&nbsp;    private String actual;
+<i>11</i>&nbsp;    private int prefixLength;
+<i>12</i>&nbsp;    private int suffixLength;
+<i>13</i>&nbsp;
+<b class="fc"><i>14</i>&nbsp;    public ComparisonCompactor(final int contextLength, final String expected, final String actual) {</b>
+<b class="fc"><i>15</i>&nbsp;        this.contextLength = contextLength;</b>
+<b class="fc"><i>16</i>&nbsp;        this.expected = expected;</b>
+<b class="fc"><i>17</i>&nbsp;        this.actual = actual;</b>
+<b class="fc"><i>18</i>&nbsp;    }</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    public String formatCompactedComparison(final String message) {
+<b class="fc"><i>21</i>&nbsp;        String compactExpected = this.expected;</b>
+<b class="fc"><i>22</i>&nbsp;        String compactActual = this.actual;</b>
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;        if (this.shouldBeCompacted()) {</b>
+<b class="fc"><i>25</i>&nbsp;            this.findCommonPrefixAndSuffix();</b>
+<b class="fc"><i>26</i>&nbsp;            compactExpected = this.compact(this.expected);</b>
+<b class="fc"><i>27</i>&nbsp;            compactActual = this.compact(this.actual);</b>
+<i>28</i>&nbsp;        }
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;        return Assert.format(message, compactExpected, compactActual);</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    private void findCommonPrefixAndSuffix() {
+<b class="fc"><i>34</i>&nbsp;        this.findCommonPrefix();</b>
+<i>35</i>&nbsp;
+<b class="fc"><i>36</i>&nbsp;        this.suffixLength = 0;</b>
+<i>37</i>&nbsp;
+<b class="fc"><i>38</i>&nbsp;        for (; !this.suffixOverlapsPrefix(); this.suffixLength++) {</b>
+<b class="fc"><i>39</i>&nbsp;            if (this.charFromEnd(this.expected, this.suffixLength) != this.charFromEnd(this.actual, this.suffixLength)) {</b>
+<b class="fc"><i>40</i>&nbsp;                break;</b>
+<i>41</i>&nbsp;            }
+<i>42</i>&nbsp;        }
+<b class="fc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    private boolean suffixOverlapsPrefix() {
+<b class="fc"><i>46</i>&nbsp;        return (this.actual.length() - this.suffixLength &lt;= this.prefixLength) ||</b>
+<b class="fc"><i>47</i>&nbsp;                (this.expected.length() - this.suffixLength &lt;= this.prefixLength);</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    private char charFromEnd(final String s, int i) {
+<b class="fc"><i>51</i>&nbsp;        return s.charAt(s.length() - (i + 1));</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    private boolean shouldBeCompacted() {
+<b class="fc"><i>55</i>&nbsp;        return this.expected != null &amp;&amp;</b>
+<i>56</i>&nbsp;                this.actual != null &amp;&amp;
+<b class="fc"><i>57</i>&nbsp;                !this.expected.equals(this.actual);</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    private String compact(final String source) {
+<b class="fc"><i>61</i>&nbsp;        return new StringBuilder()</b>
+<b class="fc"><i>62</i>&nbsp;                .append(this.startingEllipsis())</b>
+<b class="fc"><i>63</i>&nbsp;                .append(this.startingContext())</b>
+<b class="fc"><i>64</i>&nbsp;                .append(DELTA_START)</b>
+<b class="fc"><i>65</i>&nbsp;                .append(this.delta(source))</b>
+<b class="fc"><i>66</i>&nbsp;                .append(DELTA_END)</b>
+<b class="fc"><i>67</i>&nbsp;                .append(this.endingContext())</b>
+<b class="fc"><i>68</i>&nbsp;                .append(this.endingEllipsis())</b>
+<b class="fc"><i>69</i>&nbsp;                .toString();</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    private void findCommonPrefix() {
+<b class="fc"><i>73</i>&nbsp;        this.prefixLength = 0;</b>
+<b class="fc"><i>74</i>&nbsp;        final int end = Math.min(this.expected.length(), this.actual.length());</b>
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;        for (; this.prefixLength &lt; end; this.prefixLength++) {</b>
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;            if (this.expected.charAt(this.prefixLength) != this.actual.charAt(this.prefixLength)) {</b>
+<b class="fc"><i>79</i>&nbsp;                break;</b>
+<i>80</i>&nbsp;            }
+<i>81</i>&nbsp;        }
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    private String startingEllipsis() {
+<b class="fc"><i>85</i>&nbsp;        return (this.contextLength &lt; this.prefixLength) ? ELLIPSIS : &quot;&quot;;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    private String startingContext() {
+<b class="fc"><i>89</i>&nbsp;        final int contextStart = Math.max(0, this.prefixLength - this.contextLength);</b>
+<b class="fc"><i>90</i>&nbsp;        final int contextEnd = this.prefixLength;</b>
+<b class="fc"><i>91</i>&nbsp;        return this.expected.substring(contextStart, contextEnd);</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    private String delta(final String source) {
+<b class="fc"><i>95</i>&nbsp;        final int deltaStart = this.prefixLength;</b>
+<b class="fc"><i>96</i>&nbsp;        final int deltaEnd = source.length() - this.suffixLength;</b>
+<b class="fc"><i>97</i>&nbsp;        return source.substring(deltaStart, deltaEnd);</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    private String endingContext() {
+<b class="fc"><i>101</i>&nbsp;        final int contextStart = this.expected.length() - this.suffixLength;</b>
+<b class="fc"><i>102</i>&nbsp;        final int contextEnd = Math.min(contextStart + this.contextLength, this.expected.length());</b>
+<b class="fc"><i>103</i>&nbsp;        return this.expected.substring(contextStart, contextEnd);</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    private String endingEllipsis() {
+<b class="fc"><i>107</i>&nbsp;        return (this.contextLength &lt; this.suffixLength) ? ELLIPSIS : &quot;&quot;;</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-25 16:40</div>
+</div>
+</body>
+</html>
