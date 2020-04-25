@@ -34,8 +34,10 @@ import java.util.*;
 public class SpreadsheetDate extends DayDate {
     public static final int EARLIEST_DATE_ORDINAL = 2;     // 1/1/1900
     public static final int LATEST_DATE_ORDINAL = 2958465; // 12/31/9999
+
     public static final int MINIMUM_YEAR_SUPPORTED = 1900;
     public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
+
     static final int[] AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH =
             {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
     static final int[] LEAP_YEAR_AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH =
