@@ -10,11 +10,7 @@ node_modules
 # Next
 .next
 
-# Typescript files
-dist
-
-# Java compiled files
-out
-
-# Rust compiled files
+# compiled files
 target
+out
+dist
