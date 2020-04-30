@@ -25,6 +25,11 @@ class Human (
         return "Human(name='$name', age=$age, address='$address')"
     }
 
+    // Static methods
+    companion object {
+        fun getInstance() = Human("Static", 20)
+    }
+
     /**
      * Platform declaration clash: The following declarations have the same JVM signature (getName()Ljava/lang/String;):
      */
@@ -37,4 +42,6 @@ class Human (
 fun main() {
     val human = Human("devson", "Seoul", 30)
     println(human.nextAge)
+
+    Human.getInstance()
 }
