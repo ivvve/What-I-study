@@ -6,7 +6,7 @@ import { UserService } from './user/UserService';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:8100', {
+    MongooseModule.forRoot('mongodb://localhost:8100/user', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true

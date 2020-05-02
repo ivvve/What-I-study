@@ -1,6 +1,6 @@
-POST {{host}}/users
+POST http://127.0.0.1:3000/users
 Content-Type: application/json
 
 {
-  "name": "{{name}}"
+  "name": "devson"
 }

@@ -1,4 +1,4 @@
-POST {{host}}/users/{{name}}/addresses
+POST http://127.0.0.1:3000/users/devson/addresses
 Content-Type: application/json
 
 {
