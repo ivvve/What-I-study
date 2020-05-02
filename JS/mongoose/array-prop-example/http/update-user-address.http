@@ -1,0 +1,7 @@
+PATCH {{host}}/users/{{name}}/addresses/0
+Content-Type: application/json
+
+{
+  "city": "제주",
+  "detail": "서귀포"
+}

@@ -1,0 +1,6 @@
+POST {{host}}/users
+Content-Type: application/json
+
+{
+  "name": "{{name}}"
+}

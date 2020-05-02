@@ -1,0 +1,7 @@
+POST {{host}}/users/{{name}}/addresses
+Content-Type: application/json
+
+{
+  "city": "서울",
+  "detail": "강남"
+}
