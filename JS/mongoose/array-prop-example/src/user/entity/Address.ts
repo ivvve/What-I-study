@@ -1,5 +1,10 @@
+import { prop } from '@typegoose/typegoose';
+
 export class Address {
+  @prop()
   private city: string;
+
+  @prop()
   private detail: string;
 
   constructor(city: string, detail: string) {

@@ -1,4 +1,4 @@
-import { buildSchema, index, prop } from '@typegoose/typegoose';
+import { arrayProp, buildSchema, index, prop } from '@typegoose/typegoose';
 import { Address } from './Address';
 
 @index({ name: 1 }, { unique: true })
@@ -6,7 +6,7 @@ export class User {
   @prop()
   name: String;
 
-  @prop()
+  @arrayProp({ items: Address, _id: false })
   addresses: Address[];
 
   constructor(name: String) {
