@@ -1,4 +1,4 @@
-POST http://127.0.0.1:3000/users/devson/addresses/0
+PATCH http://127.0.0.1:3000/users/devson/addresses/0
 Content-Type: application/json
 
 {
