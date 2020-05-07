@@ -7,19 +7,12 @@
 - Weekends: Review and summarize what I studied or worked
 ---
 
-### January
-
-- [ ] Reading IDDD (20 pages a day)
-- Taking Udemy courses
-    - [x] NestJS course (30 minutes a day)
-    - [x] NextJS course (30 minutes a day)
-- [ ] Reading and summarize Kluge (Read this when I commute)
-
-### February
-- [ ] Reading IDDD (20 pages a day)
-- [ ] React course on Fastcampus (30 minutes a day)
-- Posting technical articles
-  - [ ] Nest.js + Mongoose + Typegoose
-  - [ ] Difference between command and event (in DDD)
-  - [ ] How to publish event (in DDD)
-  - [ ] [Managing MongoDB Atlas](https://docs.atlas.mongodb.com/)
+### May
+- [ ] Finishing summarizing `Clean Code`
+  - 1 chapters a week
+- [ ] Translating [ddd-by-example/library](https://github.com/ddd-by-examples/library)
+  - 30 minutes a day
+- [ ] Following [Inflearn lecture](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-JPA-%EC%9B%B9%EC%95%B1)
+  - 30 minutes a day
+- [ ] Reading [Microservices Patterns](http://m.yes24.com/goods/detail/86542732)
+  - 10 pages a day
