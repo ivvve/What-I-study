@@ -52,7 +52,7 @@ func getInputNumber() (int, error) {
 	}
 
 	input = strings.TrimSpace(input)
-	inputNumber, err := strconv.ParseInt(input, 0, 64)
+	inputNumber, err := strconv.Atoi(input)
 
 	if err != nil {
 		return 0, err
@@ -62,5 +62,5 @@ func getInputNumber() (int, error) {
 		return 0, errors.New("Number must be between 1 and 100")
 	}
 
-	return int(inputNumber), err
+	return inputNumber, err
 }
