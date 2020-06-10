@@ -16,7 +16,7 @@ func main() {
 	success := false
 
 	rand.Seed(time.Now().Unix()) // 난수 생성기 seed / 없으면 rand.Intn은 항상 고정된 값을 리턴한다
-	target := rand.Intn(100)
+	target := rand.Intn(100) + 1
 
 	for i := 0; i < 10; i++ {
 		inputNumber, err := getInputNumber()
