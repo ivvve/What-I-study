@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: DiscoveryService
+server:
+  port: 8010
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8100/eureka
+    fetch-registry: false
+    register-with-eureka: false
