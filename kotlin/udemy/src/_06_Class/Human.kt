@@ -1,23 +1,22 @@
 package _06_Class
 
-class Human (
+class Human(
         var name: String,
         var age: Int
-){
+) {
     var address: String
-
-    get() {
-        return field
-    }
+        get() {
+            return field
+        }
 
     val nextAge // dummy variable
-    get() = this.age + 1
+        get() = this.age + 1
 
     init {
         this.address = "Unknown"
     }
 
-    constructor(name: String, address: String, age: Int): this(name, age) {
+    constructor(name: String, address: String, age: Int) : this(name, age) {
         this.address = address
     }
 

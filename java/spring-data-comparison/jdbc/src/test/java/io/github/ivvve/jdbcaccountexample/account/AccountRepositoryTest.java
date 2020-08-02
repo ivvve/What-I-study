@@ -21,7 +21,7 @@ class AccountRepositoryTest {
     @DisplayName("save method")
     @Nested
     class saveMethod {
-        final Account accountData = new Account("devson", LocalDate.of(1991, 11, 9));
+        final Account accountData = new Account("devson", LocalDate.of(1991, 11, 9), City.SEOUL);
 
         @DisplayName("should return Account instance with id")
         @Test
@@ -47,6 +47,7 @@ class AccountRepositoryTest {
 
             assertThat(savedAccount.getName()).isEqualTo(accountData.getName());
             assertThat(savedAccount.getBirthday()).isEqualTo(accountData.getBirthday());
+            assertThat(savedAccount.getCity()).isEqualTo(accountData.getCity());
         }
     }
 
@@ -62,8 +63,8 @@ class AccountRepositoryTest {
             final String nameB = "bob";
 
             accountRepository.saveAll(Arrays.asList(
-                    new Account(nameA, LocalDate.of(2000, 1, 1)),
-                    new Account(nameB, LocalDate.of(2000, 1, 1))
+                    new Account(nameA, LocalDate.of(2000, 1, 1), City.SEOUL),
+                    new Account(nameB, LocalDate.of(2000, 1, 1), City.JEJU)
             ));
 
             // when

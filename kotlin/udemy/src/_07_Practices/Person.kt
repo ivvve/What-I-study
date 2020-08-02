@@ -10,9 +10,9 @@ class Person(
         val dateOfBirth: Calendar?
 ) {
     val age: Int
-    get() {
-        return getAge(this.dateOfBirth)
-    }
+        get() {
+            return getAge(this.dateOfBirth)
+        }
 
     companion object {
         fun getAge(dateOfBirth: Calendar?): Int {
@@ -58,7 +58,7 @@ class Person(
 
 fun main() {
     val john = Person(1, "Mr", "John", "Blue", GregorianCalendar(1977, 9, 3))
-    val jane= Person(2, "Mrs", "Jane", "Green", null)
+    val jane = Person(2, "Mrs", "Jane", "Green", null)
 
     println("${john}'s age is ${john.age}")
     println("${jane}'s age is ${jane.age}")

@@ -8,7 +8,7 @@ data class PersonVO(
 
 fun main() {
     val person = PersonVO("devson", "Seoul", 29)
-    val ( name, address, age ) = PersonVO("devson", "Seoul", 29)
+    val (name, address, age) = PersonVO("devson", "Seoul", 29)
 
     val inchoenMan = person.copy(address = "Inchoen")
     println(inchoenMan)

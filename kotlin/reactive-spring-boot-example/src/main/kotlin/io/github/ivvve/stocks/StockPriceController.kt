@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
 @RestController()
 @RequestMapping("/stocks")
 class StockPriceController {
-    @GetMapping(value = ["/{symbol}"], produces= [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(value = ["/{symbol}"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun prices(@PathVariable symbol: String): Flux<StockPrice> {
         return Flux.interval(Duration.ofSeconds(1))
                 .map { StockPrice(symbol, this.getRandomMoney(), LocalDateTime.now()) }

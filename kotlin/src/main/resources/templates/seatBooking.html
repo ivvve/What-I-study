@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Theater Booking</title>
+</head>
+<body>
+    <h1>Theater Booking</h1>
+<h2>Seat availability</h2>
+
+    <form action="/checkAvailability" th:object="${bean}" method="POST">
+    <p>Check if seat number
+        <select th:field="*{selectedSeatNum}">
+            <option th:each="n : ${bean.seatNums}" th:value="${n}" th:text="${n}" />
+        </select>
+         in row
+        <select th:field="*{selectedSeatRow}">
+            <option th:each="r : ${bean.seatRows}" th:value="${r}" th:text="${r}" />
+        </select>
+        is available <input type="submit"/></p>
+
+    </form>
+
+    <p th:text="${bean.result}"></p>
+</body>
+</html>

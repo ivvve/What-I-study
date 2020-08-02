@@ -16,3 +16,7 @@
   - 30 minutes a day
 - [ ] Reading [Microservices Patterns](http://m.yes24.com/goods/detail/86542732)
   - 10 pages a day
+
+- Second week
+  - 07
+    - seminar / woowa crud

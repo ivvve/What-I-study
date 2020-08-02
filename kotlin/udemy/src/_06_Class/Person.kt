@@ -29,7 +29,7 @@ class Person2(
     }
 
     // constructor overloading
-    constructor(name: String, age: Int): this(name, "Unknown", age) {
+    constructor(name: String, age: Int) : this(name, "Unknown", age) {
         println("Secondary constructor block")
     }
 }

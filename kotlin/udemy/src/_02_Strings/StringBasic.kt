@@ -1,15 +1,16 @@
 package _02_Strings
 
 fun main() {
-    val name = "devson"
+//    val name = "devson"
 
     // String template
-    println("Hello $name")
-    println("Name length is ${name.length}")
+//    println("Hello \$name")
+//    println("Name length is ${name.length}")
 
     // Multi line string
-    val story = """It was a dark and stormy night
-        |A foul smell crept across the city.
-        |The End.""".trimMargin("|")
+    val story ="""
+		|Hello.
+		|This is the story about a developer.
+	""".trimMargin("|")
     println(story)
 }
