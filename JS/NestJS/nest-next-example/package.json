@@ -14,7 +14,7 @@
   "dependencies": {
     "@nestjs/common": "^6.5.3",
     "@nestjs/core": "^6.5.3",
-    "@nestjs/platform-express": "^6.5.3",
+    "@nestjs/platform-express": "^9.2.1",
     "cross-env": "^6.0.3",
     "nest-next": "^9.1.0",
     "next": "^11.1.0",
