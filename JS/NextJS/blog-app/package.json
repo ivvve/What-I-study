@@ -11,7 +11,7 @@
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.18.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "moment": "^2.22.2",
     "mongoose": "^5.3.12",
     "next": "11.1.0",
